@@ -1,7 +1,6 @@
-
-//Stations
-const upgradeData = {
-    "Mining Operation": [
+document.addEventListener('DOMContentLoaded', () => {
+    const upgradeData = {
+      "Mining Operation": [
         { iron: 1, coal: 3 },
         { iron: 3, silver: 3, coal: 5 },
         { iron: 20, silver: 15, coal: 15 },
@@ -32,8 +31,8 @@ const upgradeData = {
           boomite: 100, coal: 100, copper: 100, corium: 100, diamond: 100, dragonstone: 100, dragonglass: 100, emerald: 100, firecrystal: 100, garnet: 100, gold: 100, illuminunium: 100, iron: 100, 
           mithril: 100, moonstone: 100, newtonium: 100, opal: 100, painite: 100, platinum: 100, plutonium: 100, promethium: 100, rainbonite: 100, ruby: 100, sapphire: 100, serendibite: 100, silver: 100, 
           solarium: 100, sulfur: 100, topaz: 100, uranium: 100, yunium: 100 }
-    ],
-    "Data & Analysis": [
+      ],
+      "Data & Analysis": [
         { copper: 5, iron: 5 },
         { coins: 70, copper: 5, iron: 30 },
         { coins: 400, copper: 35, iron: 30 },
@@ -51,8 +50,8 @@ const upgradeData = {
         { coins: 250000, copper: 3500, unobtainium: 75, dragonstone: 250, newtonium: 100, promethium: 45 },
         { coins: 1750000, copper: 4000, unobtainium: 100, dragonstone: 400, silver: 5400, promethium: 55, corium: 50, yunium: 50 },
         { coins: 2000000, unobtainium: 100, darkmatter: 350, antimatter: 250, constellatium: 100, stellarite: 200, frightstone: 500, element_v: 1 }
-    ],
-    "Marketplace": [
+      ],
+      "Marketplace": [
         { ruby: 1 },
         { coins: 1000, topaz: 3 },
         { coins: 2500, topaz: 5, diamond: 3 },
@@ -67,8 +66,8 @@ const upgradeData = {
         { coins: 500000, rainbonite: 100, topaz: 100, ruby: 100, emerald: 100, sapphire: 100, diamond: 100, amethyst: 100, newtonium: 75, promethium: 60, dragonstone: 500 },
         { coins: 750000, rainbonite: 250, topaz: 500, ruby: 500, emerald: 500, sapphire: 500, diamond: 500, amethyst: 500, newtonium: 250, promethium: 75, dragonstone: 500, corium: 60, yunium: 35, solarium: 50 },
         { coins: 1000000, frightstone: 500, antimatter: 125, darkmatter: 190, stellarite: 75, constellatium: 80, element_v: 1, unobtainium: 100 }
-    ],
-    "Research & Development": [
+      ],
+      "Research & Development": [
         { sapphire: 1 },
         { coins: 70, iron: 5, emerald: 1 },
         { coins: 1000, iron: 10, diamond: 1 },
@@ -84,8 +83,8 @@ const upgradeData = {
         { coins: 600000, newtonium: 120, dragonstone: 500, illuminunium: 20, promethium: 35, uranium: 80, plutonium: 100, unobtainium: 55 },
         { coins: 600000, newtonium: 280, dragonstone: 500, promethium: 35, yunium: 45, corium: 80, solarium: 50, unobtainium: 55 },
         { coins: 1000000, darkmatter: 150, frightstone: 500, antimatter: 100, constellatium: 75, element_v: 1, stellarite: 50, unobtainium: 100 }
-    ],
-    "Storage Management": [
+      ],
+      "Storage Management": [
         { silver: 3 },
         { coins: 100, silver: 25, ruby: 3 },
         { coins: 2000, silver: 70, sapphire: 10 },
@@ -102,165 +101,311 @@ const upgradeData = {
         { coins: 1350000, unobtainium: 70, dragonstone: 600, newtonium: 150, promethium: 80 },
         { coins: 1500000, unobtainium: 120, dragonstone: 700, newtonium: 750, promethium: 80, corium: 75, solarium: 35, yunium: 100 },
         { coins: 2000000, unobtainium: 125, constellatium: 80, stellarite: 100, antimatter: 200, darkmatter: 300, frightstone: 500, element_v: 1 }
-    ],
-    "Teleporter Array": [
+      ],
+      "Teleporter Array": [
         { coins: 25 }
-    ],
-    "Personal Tunnel": [
+      ],
+      "Personal Tunnel": [
         { unobtainium: 300 }
-    ]
-}
-
-
-
-
-  const oreTypes = ["Ambrosia", "Amethyst", "Antimatter", "Azure", "Baryte", "Boomite", "Coal", "Coins", "Constellatium", "Copper", "Corium", "Darkmatter", "Diamond", "Dragonglass", "Dragonstone", "Element V", "Emerald", "Firecrystal", "Frawstbyte", "Frightstone", "Frostarium", "Garnet", "Giftium", "Gingerbreadium", "Gold", "Illuminunium", "Iron", "Kappa", "Mithril", "Moonstone", "Newtonium", "Nightmarium", "Nihilium", "Noobite", "Opal", "Orichalcum", "Painite", "Peppermintium", "Platinum", "Plutonium", "Pumpkinite", "Promethium", "Rainbonite", "Redmatter", "Ruby", "Sapphire", "Serendibite", "Shadow Metal", "Silver", "Sinistyte E", "Sinistyte L", "Sinistyte M", "Sinistyte S", "Solarium", "Soulstone", "Stellarite", "Stone", "Sulfur", "Symmetrium", "Topaz", "Twitchite", "Unobtainium", "Uranium", "Valhalum", "Yunium"];
-  
-  const inventoryInputs = {
-  coins: document.getElementById("coins-owned"),
-
-  ambrosia: document.getElementById("ambrosia-owned"),
-  amethyst: document.getElementById("amethyst-owned"),
-  antimatter: document.getElementById("antimatter-owned"),
-  azure: document.getElementById("azure-owned"),
-  baryte: document.getElementById("baryte-owned"),
-  boomite: document.getElementById("boomite-owned"),
-  coal: document.getElementById("coal-owned"),
-  constellatium: document.getElementById("constellatium-owned"),
-  copper: document.getElementById("copper-owned"),
-  corium: document.getElementById("corium-owned"),
-  darkmatter: document.getElementById("darkmatter-owned"),
-  diamond: document.getElementById("diamond-owned"),
-  dragonglass: document.getElementById("dragonglass-owned"),
-  dragonstone: document.getElementById("dragonstone-owned"),
-  elementv: document.getElementById("elementv-owned"),
-  emerald: document.getElementById("emerald-owned"),
-  firecrystal: document.getElementById("firecrystal-owned"),
-  frawstbyte: document.getElementById("frawstbyte-owned"),
-  frightstone: document.getElementById("frightstone-owned"),
-  frostarium: document.getElementById("frostarium-owned"),
-  garnet: document.getElementById("garnet-owned"),
-  giftium: document.getElementById("giftium-owned"),
-  gingerbreadium: document.getElementById("gingerbreadium-owned"),
-  gold: document.getElementById("gold-owned"),
-  illuminunium: document.getElementById("illuminunium-owned"),
-  iron: document.getElementById("iron-owned"),
-  kappa: document.getElementById("kappa-owned"),
-  mithril: document.getElementById("mithril-owned"),
-  moonstone: document.getElementById("moonstone-owned"),
-  newtonium: document.getElementById("newtonium-owned"),
-  nightmarium: document.getElementById("nightmarium-owned"),
-  nihilium: document.getElementById("nihilium-owned"),
-  noobite: document.getElementById("noobite-owned"),
-  opal: document.getElementById("opal-owned"),
-  orichalcum: document.getElementById("orichalcum-owned"),
-  painite: document.getElementById("painite-owned"),
-  peppermintium: document.getElementById("peppermintium-owned"),
-  platinum: document.getElementById("platinum-owned"),
-  plutonium: document.getElementById("plutonium-owned"),
-  pumpkinite: document.getElementById("pumpkinite-owned"),
-  promethium: document.getElementById("promethium-owned"),
-  rainbonite: document.getElementById("rainbonite-owned"),
-  redmatter: document.getElementById("redmatter-owned"),
-  ruby: document.getElementById("ruby-owned"),
-  sapphire: document.getElementById("sapphire-owned"),
-  serendibite: document.getElementById("serendibite-owned"),
-  shadowmetal: document.getElementById("shadowmetal-owned"),
-  silver: document.getElementById("silver-owned"),
-  sinistytee: document.getElementById("sinistytee-owned"),
-  sinistytel: document.getElementById("sinistytel-owned"),
-  sinistytem: document.getElementById("sinistytem-owned"),
-  sinistytes: document.getElementById("sinistytes-owned"),
-  solarium: document.getElementById("solarium-owned"),
-  soulstone: document.getElementById("soulstone-owned"),
-  stellarite: document.getElementById("stellarite-owned"),
-  stone: document.getElementById("stone-owned"),
-  sulfur: document.getElementById("sulfur-owned"),
-  symmetrium: document.getElementById("symmetrium-owned"),
-  topaz: document.getElementById("topaz-owned"),
-  twitchite: document.getElementById("twitchite-owned"),
-  unobtainium: document.getElementById("unobtainium-owned"),
-  uranium: document.getElementById("uranium-owned"),
-  valhalum: document.getElementById("valhalum-owned"),
-  yunium: document.getElementById("yunium-owned")
-};
-  
-  
-document.addEventListener("DOMContentLoaded", function () {
-    initializeCharts();
-});
-
-function waitForCanvasAndInit() {
-    const checkExist = setInterval(() => {
-        const canvasExists = document.querySelector("#chartCanvas") !== null;
-        if (canvasExists) {
-            clearInterval(checkExist);
-            initializeCharts();
-        }
-    }, 100);
-}
-
-function initializeCharts() {
-    const ctx = document.getElementById("chartCanvas");
-    if (!ctx) return console.error("Chart canvas elements are missing from the DOM.");
-
-    const chartData = {
-        labels: oreTypes,
-        datasets: [{
-            label: "Ore Costs",
-            data: new Array(oreTypes.length).fill(0),
-            backgroundColor: "rgba(54, 162, 235, 0.6)",
-            borderColor: "rgba(54, 162, 235, 1)",
-            borderWidth: 1
-        }]
+      ]
     };
-
-    window.myChart = new Chart(ctx.getContext("2d"), {
-        type: "bar",
-        data: chartData,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: { y: { beginAtZero: true } }
+  
+    const stationMapping = {
+      miningOperation: "Mining Operation",
+      dataAndAnalysis: "Data & Analysis",
+      marketplace: "Marketplace",
+      researchAndDevelopment: "Research & Development",
+      storageManagement: "Storage Management",
+      teleporterArray: "Teleporter Array",
+      personalTunnel: "Personal Tunnel"
+    };
+  
+    const ores = [
+      { id: 'ambrosia', name: 'Ambrosia', icon: './src/ambrosia.png', owned: 0 },
+      { id: 'amethyst', name: 'Amethyst', icon: './src/amethyst.png', owned: 0 },
+      { id: 'antimatter', name: 'Antimatter', icon: './src/antimatter.png', owned: 0 },
+      { id: 'azure', name: 'Azure', icon: './src/azure.png', owned: 0 },
+      { id: 'baryte', name: 'Baryte', icon: './src/baryte.png', owned: 0 },
+      { id: 'boomite', name: 'Boomite', icon: './src/boomite.png', owned: 0 },
+      { id: 'coal', name: 'Coal', icon: './src/coal.png', owned: 0 },
+      { id: 'coins', name: 'Coins', icon: './src/coin.png', owned: 0 },
+      { id: 'constellatium', name: 'Constellatium', icon: './src/constellatium.png', owned: 0 },
+      { id: 'copper', name: 'Copper', icon: './src/copper.png', owned: 0 },
+      { id: 'corium', name: 'Corium', icon: './src/corium.png', owned: 0 },
+      { id: 'darkmatter', name: 'Darkmatter', icon: './src/darkmatter.png', owned: 0 },
+      { id: 'diamond', name: 'Diamond', icon: './src/diamond.png', owned: 0 },
+      { id: 'dragonglass', name: 'Dragonglass', icon: './src/dragonglass.png', owned: 0 },
+      { id: 'dragonstone', name: 'Dragonstone', icon: './src/dragonstone.png', owned: 0 },
+      { id: 'elementv', name: 'Element V', icon: './src/elementv.png', owned: 0 },
+      { id: 'emerald', name: 'Emerald', icon: './src/emerald.png', owned: 0 },
+      { id: 'firecrystal', name: 'Firecrystal', icon: './src/firecrystal.png', owned: 0 },
+      { id: 'frawstbyte', name: 'Frawstbyte', icon: './src/frawstbyte.png', owned: 0 },
+      { id: 'frightstone', name: 'Frightstone', icon: './src/frightstone.png', owned: 0 },
+      { id: 'frostarium', name: 'Frostarium', icon: './src/frostarium.png', owned: 0 },
+      { id: 'garnet', name: 'Garnet', icon: './src/garnet.png', owned: 0 },
+      { id: 'giftium', name: 'Giftium', icon: './src/giftium.png', owned: 0 },
+      { id: 'gingerbreadium', name: 'Gingerbreadium', icon: './src/gingerbreadium.png', owned: 0 },
+      { id: 'gold', name: 'Gold', icon: './src/gold.png', owned: 0 },
+      { id: 'illuminunium', name: 'Illuminunium', icon: './src/illuminunium.png', owned: 0 },
+      { id: 'iron', name: 'Iron', icon: './src/iron.png', owned: 0 },
+      { id: 'kappa', name: 'Kappa', icon: './src/kappa.png', owned: 0 },
+      { id: 'mithril', name: 'Mithril', icon: './src/mithril.png', owned: 0 },
+      { id: 'moonstone', name: 'Moonstone', icon: './src/moonstone.png', owned: 0 },
+      { id: 'newtonium', name: 'Newtonium', icon: './src/newtonium.png', owned: 0 },
+      { id: 'nightmarium', name: 'Nightmarium', icon: './src/nightmarium.png', owned: 0 },
+      { id: 'nihilium', name: 'Nihilium', icon: './src/nihilium.png', owned: 0 },
+      { id: 'noobite', name: 'Noobite', icon: './src/noobite.png', owned: 0 },
+      { id: 'opal', name: 'Opal', icon: './src/opal.png', owned: 0 },
+      { id: 'orichalcum', name: 'Orichalcum', icon: './src/orichalcum.png', owned: 0 },
+      { id: 'painite', name: 'Painite', icon: './src/painite.png', owned: 0 },
+      { id: 'peppermintium', name: 'Peppermintium', icon: './src/peppermintium.png', owned: 0 },
+      { id: 'platinum', name: 'Platinum', icon: './src/platinum.png', owned: 0 },
+      { id: 'plutonium', name: 'Plutonium', icon: './src/plutonium.png', owned: 0 },
+      { id: 'pumpkinite', name: 'Pumpkinite', icon: './src/pumpkinite.png', owned: 0 },
+      { id: 'promethium', name: 'Promethium', icon: './src/promethium.png', owned: 0 },
+      { id: 'rainbonite', name: 'Rainbonite', icon: './src/rainbonite.png', owned: 0 },
+      { id: 'redmatter', name: 'Redmatter', icon: './src/redmatter.png', owned: 0 },
+      { id: 'ruby', name: 'Ruby', icon: './src/ruby.png', owned: 0 },
+      { id: 'sapphire', name: 'Sapphire', icon: './src/sapphire.png', owned: 0 },
+      { id: 'serendibite', name: 'Serendibite', icon: './src/serendibite.png', owned: 0 },
+      { id: 'shadowmetal', name: 'Shadow Metal', icon: './src/shadowmetal.png', owned: 0 },
+      { id: 'silver', name: 'Silver', icon: './src/silver.png', owned: 0 },
+      { id: 'sinistytee', name: 'Sinistyte E', icon: './src/sinistytee.png', owned: 0 },
+      { id: 'sinistytel', name: 'Sinistyte L', icon: './src/sinistytel.png', owned: 0 },
+      { id: 'sinistytem', name: 'Sinistyte M', icon: './src/sinistytem.png', owned: 0 },
+      { id: 'sinistytes', name: 'Sinistyte S', icon: './src/sinistytes.png', owned: 0 },
+      { id: 'solarium', name: 'Solarium', icon: './src/solarium.png', owned: 0 },
+      { id: 'soulstone', name: 'Soulstone', icon: './src/soulstone.png', owned: 0 },
+      { id: 'stellarite', name: 'Stellarite', icon: './src/stellarite.png', owned: 0 },
+      { id: 'stone', name: 'Stone', icon: './src/stone.png', owned: 0 },
+      { id: 'sulfur', name: 'Sulfur', icon: './src/sulfur.png', owned: 0 },
+      { id: 'symmetrium', name: 'Symmetrium', icon: './src/symmetrium.png', owned: 0 },
+      { id: 'topaz', name: 'Topaz', icon: './src/topaz.png', owned: 0 },
+      { id: 'twitchite', name: 'Twitchite', icon: './src/twitchite.png', owned: 0 },
+      { id: 'unobtainium', name: 'Unobtainium', icon: './src/unobtainium.png', owned: 0 },
+      { id: 'uranium', name: 'Uranium', icon: './src/uranium.png', owned: 0 },
+      { id: 'valhalum', name: 'Valhalum', icon: './src/valhalum.png', owned: 0 },
+      { id: 'yunium', name: 'Yunium', icon: './src/yunium.png', owned: 0 }
+    ];
+    
+    const charts = {};
+    
+    function generateOreInputs() {
+      const inventoryContainer = document.querySelector('.inventory-container');
+      if (!inventoryContainer) return;
+      inventoryContainer.innerHTML = '';
+      ores.forEach(ore => {
+        const oreDiv = document.createElement('div');
+        oreDiv.className = 'ore-input';
+        oreDiv.innerHTML = `
+          <img src="${ore.icon}" alt="${ore.name}" />
+          <label for="${ore.id}-owned">${ore.name}:</label>
+          <input type="number" id="${ore.id}-owned" value="${ore.owned}" />
+        `;
+        inventoryContainer.appendChild(oreDiv);
+      });
+    }
+    
+    function updateOwnedOres() {
+      ores.forEach(ore => {
+        const input = document.getElementById(`${ore.id}-owned`);
+        if (input) {
+          ore.owned = Number(input.value);
+        }
+      });
+      calculateAndDisplayResults();
+    }
+    
+    const toggleBtn = document.getElementById('toggle-inventory');
+    const inventorySection = document.getElementById('inventory-section');
+            
+    toggleBtn.addEventListener('click', () => {
+        inventorySection.classList.toggle('hidden');
+              
+        if (inventorySection.classList.contains('hidden')) {
+          toggleBtn.textContent = 'Show Inventory';
+        } else {
+          toggleBtn.textContent = 'Hide Inventory';
         }
     });
-}
+    
+    function getNextUpgradeCost(stationId, currentLevel) {
+        const key = stationMapping[stationId];
+        const upgrades = upgradeData[key];
+        if (!upgrades) return null;
+        return upgrades[currentLevel] || null;
+    }
+  
+    function getMaxOutCost(stationId, currentLevel) {
+      const key = stationMapping[stationId];
+      const upgrades = upgradeData[key];
+      if (!upgrades) return null;
+      const totalCost = {};
+      for (let i = currentLevel; i < upgrades.length; i++) {
+        const cost = upgrades[i];
+        for (const resource in cost) {
+          totalCost[resource] = (totalCost[resource] || 0) + cost[resource];
+        }
+      }
+      return totalCost;
+    }
+    
+    function getOwnedAmount(resourceId) {
+      const ore = ores.find(o => o.id === resourceId);
+      return ore ? ore.owned : 0;
+    }
+    
+    function applyInventoryCost(costData) {
+      const netCost = {};
+      for (const resource in costData) {
+        const required = costData[resource];
+        const owned = getOwnedAmount(resource);
+        netCost[resource] = Math.max(0, required - owned);
+      }
+      return netCost;
+    }
+    
+    function updateChart(stationId, type, costData) {
+      const canvasId = `chart-${stationId}-${type}`;
+      const ctx = document.getElementById(canvasId);
+      if (!ctx) return;
+    
+      let coinCost = costData.coins;
 
+      const filteredCost = { ...costData };
+      delete filteredCost.coins;
 
-function calculateUpgradeCost(upgradeType, level) {
-    const upgradeLevels = upgradeData[upgradeType];
-    if (!upgradeLevels || level >= upgradeLevels.length) {
-        console.warn("Invalid upgrade level or missing data.");
-        return {};
+      const labels = Object.keys(filteredCost);
+      const data = labels.map(key => filteredCost[key]);
+    
+      const chartConfig = {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Cost',
+            data: data,
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { beginAtZero: true }
+          },
+          plugins: {
+            legend: { display: false },
+            title: {
+              display: true,
+              text: type === 'next' ? 'Next Upgrade Cost' : 'Max Out Cost'
+            }
+          }
+        }
+      };
+    
+      if (charts[canvasId]) {
+        charts[canvasId].data = chartConfig.data;
+        charts[canvasId].options = chartConfig.options;
+        charts[canvasId].update();
+      } else {
+        charts[canvasId] = new Chart(ctx, chartConfig);
+      }
+
+    
+      const chartContainer = ctx.parentElement;
+      let coinInfo = chartContainer.querySelector('.coin-info');
+      if (!coinInfo) {
+        coinInfo = document.createElement('div');
+        coinInfo.className = 'coin-info';
+        chartContainer.appendChild(coinInfo);
+      }
+      if (coinCost !== undefined) {
+        coinInfo.textContent = `Coins needed: ${coinCost}`;
+      } else {
+        coinInfo.textContent = 'No coin cost';
+      }
+    }
+    
+    function setStationSliderMaxes() {
+      const stationCards = document.querySelectorAll('.station-card');
+      stationCards.forEach(card => {
+        const stationId = card.getAttribute('data-station');
+        const key = stationMapping[stationId];
+        const upgrades = upgradeData[key];
+        const slider = card.querySelector('.station-slider');
+        if (slider && upgrades) {
+          slider.max = upgrades.length;
+        }
+      });
+    }
+    
+    function updateStationLevel(e) {
+        const slider = e.target;
+        const stationCard = slider.closest('.station-card');
+        const stationId = stationCard.getAttribute('data-station');
+        const levelSpan = stationCard.querySelector('.station-level');
+        const chartContainer = stationCard.querySelector('.chart-container');
+        let maxLevelText = stationCard.querySelector('.max-level-text');
+        const newLevel = Number(slider.value);
+      
+        if (levelSpan) levelSpan.textContent = newLevel;
+      
+        if (!maxLevelText) {
+          maxLevelText = document.createElement('div');
+          maxLevelText.className = 'max-level-text';
+          maxLevelText.textContent = 'Max Level Reached';
+          chartContainer.parentElement.appendChild(maxLevelText);
+        }
+      
+        if (newLevel >= slider.max) {
+          chartContainer.style.display = 'none';
+          maxLevelText.style.display = 'block';
+        } else {
+          chartContainer.style.display = 'block';
+          maxLevelText.style.display = 'none';
+        }
+      
+        calculateAndDisplayResults();
     }
 
-    return upgradeLevels[level];
-}
-
-function updateChart(upgradeType, level) {
-    if (!window.myChart) {
-        console.error("Chart has not been initialized.");
-        return;
+    
+    function calculateAndDisplayResults() {
+      for (const stationId in stationMapping) {
+        const stationCard = document.querySelector(`.station-card[data-station="${stationId}"]`);
+        if (stationCard) {
+          const slider = stationCard.querySelector('.station-slider');
+          const currentLevel = Number(slider.value);
+          const rawNextCost = getNextUpgradeCost(stationId, currentLevel) || {};
+          const rawMaxCost = getMaxOutCost(stationId, currentLevel) || {};
+    
+          const nextCost = applyInventoryCost(rawNextCost);
+          const maxCost = applyInventoryCost(rawMaxCost);
+    
+          updateChart(stationId, 'next', nextCost);
+          updateChart(stationId, 'max', maxCost);
+        }
+      }
     }
-
-    const costData = calculateUpgradeCost(upgradeType, level);
-    const updatedValues = oreTypes.map(ore => costData[ore.toLowerCase()] || 0);
-
-    window.myChart.data.datasets[0].data = updatedValues;
-    window.myChart.update();
-}
-
-document.getElementById("upgradeSelect").addEventListener("change", function () {
-    const selectedUpgrade = this.value;
-    const level = parseInt(document.getElementById("levelSelect").value, 10);
-    updateChart(selectedUpgrade, level);
-});
-
-document.getElementById("levelSelect").addEventListener("change", function () {
-    const selectedUpgrade = document.getElementById("upgradeSelect").value;
-    const level = parseInt(this.value, 10);
-    updateChart(selectedUpgrade, level);
-});
-
-
-waitForCanvasAndInit();
+    
+    function attachEventListeners() {
+      ores.forEach(ore => {
+        const input = document.getElementById(`${ore.id}-owned`);
+        if (input) {
+          input.addEventListener('input', updateOwnedOres);
+        }
+      });
+      const stationSliders = document.querySelectorAll('.station-slider');
+      stationSliders.forEach(slider => {
+        slider.addEventListener('input', updateStationLevel);
+      });
+    }
+      
+    generateOreInputs();
+    setStationSliderMaxes();
+    attachEventListeners();
+    calculateAndDisplayResults();
+  });
+  
