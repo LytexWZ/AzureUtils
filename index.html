@@ -1,188 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Azure Mines Upgrade Calculator</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" type="image/png" href="./src/Lytex.jpg">
-  <script src="./data/gameData.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Utils by LytexWZ</title>
+    <link rel="icon" type="image/png" href="./src/AzureMines.jpg">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="beta-warning">
-        ⚠️ Warning! Site is still in beta. Bugs expected.
-      </div>
-
-  <header>
-    <h1>Azure Mines Upgrade Tracker</h1>
-    <p id="instructions">Use the sliders to adjust levels and view upgrade costs by hovering graphs with the mouse. <br>
-         Toggle inventory to input your resources and get a more accurate result.</p>
-
-    <div class="progress-container">
-      <label for="game-progress">Game Completion:</label>
-      <progress id="game-progress" value="0" max="100"></progress>
-      <span id="progress-percentage">0%</span>
+        ⚠️ Warning! Trade & Value calculators are still in beta. Bugs expected.
     </div>
-    <button id="toggle-inventory">Show Inventory</button>
 
-<div id="inventory-section" class="inventory-container hidden">
-  <div class="ore-input">
-    <img src="./src/Ambrosia.png" alt="Ambrosia" />
-    <label for="ambrosia-owned">Ambrosia:</label>
-    <input type="number" id="ambrosia-owned" value="0" />
-  </div>
-  <div class="ore-input">
-    <img src="./src/Amethyst.png" alt="Amethyst" />
-    <label for="amethyst-owned">Amethyst:</label>
-    <input type="number" id="amethyst-owned" value="0" />
-  </div>
-</div>
+    <div class="background"></div>
 
-  </header>
+    <div class="container">
+        <div class="card fade-in">
+            <img src="./src/AzureMines.jpg" alt="Profile Picture" class="profile-pic">
+            <h1>Welcome to Azure Utils</h1>
+            <p>Official links</p>
+            <div class="btn-group">
+            <a href="https://azuremines.fandom.com/wiki/Rules" class="btn official">Game Wiki</a>
+            <a href="https://discord.gg/8PEqAaYt" class="btn official">Discord server</a>
+        </div>
 
-  <main>
-    <section class="stations-container">
-      <div class="station-card" data-station="miningOperation">
-        <h2>Mining Operation</h2>
-        <img src="./src/Mining_Operation.png" alt="Mining Operation" />
-        <p>Level: <span class="station-level">0</span></p>
-        <input type="range" min="0" max="5" value="0" class="station-slider" />
-        <div class="charts-row">
-          <div class="chart-container">
-            <h3>Next Upgrade</h3>
-            <canvas id="chart-miningOperation-next"></canvas>
-          </div>
-          <div class="chart-container">
-            <h3>Max Out</h3>
-            <canvas id="chart-miningOperation-max"></canvas>
-          </div>
+        <div class="extra-links">
+        <p>Our tools</p>
+        <div class="btn-group extra-double">
+          <a href="./" class="btn trade">Trade Calculator</a>
+          <a href="./" class="btn trade">Value calculator</a>
+        </div>
+        <div class="btn-group extra-single">
+          <a href="./ProgressTracker/dynamiccalc.html" class="btn progress">Progress Tracker</a>
         </div>
       </div>
-
-      <div class="station-card" data-station="dataAndAnalysis">
-        <h2>Data &amp; Analysis</h2>
-        <img src="./src/Data_analysis.png" alt="Data &amp; Analysis" />
-        <p>Level: <span class="station-level">0</span></p>
-        <input type="range" min="0" max="5" value="0" class="station-slider" />
-        <div class="charts-row">
-          <div class="chart-container">
-            <h3>Next Upgrade</h3>
-            <canvas id="chart-dataAndAnalysis-next"></canvas>
-          </div>
-          <div class="chart-container">
-            <h3>Max Out</h3>
-            <canvas id="chart-dataAndAnalysis-max"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <div class="station-card" data-station="marketplace">
-        <h2>Marketplace</h2>
-        <img src="./src/Marketplace.png" alt="Marketplace" />
-        <p>Level: <span class="station-level">0</span></p>
-        <input type="range" min="0" max="5" value="0" class="station-slider" />
-        <div class="charts-row">
-          <div class="chart-container">
-            <h3>Next Upgrade</h3>
-            <canvas id="chart-marketplace-next"></canvas>
-          </div>
-          <div class="chart-container">
-            <h3>Max Out</h3>
-            <canvas id="chart-marketplace-max"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <div class="station-card" data-station="researchAndDevelopment">
-        <h2>Research &amp; Development</h2>
-        <img src="./src/Research_Development.png" alt="Research &amp; Development" />
-        <p>Level: <span class="station-level">0</span></p>
-        <input type="range" min="0" max="5" value="0" class="station-slider" />
-        <div class="charts-row">
-          <div class="chart-container">
-            <h3>Next Upgrade</h3>
-            <canvas id="chart-researchAndDevelopment-next"></canvas>
-          </div>
-          <div class="chart-container">
-            <h3>Max Out</h3>
-            <canvas id="chart-researchAndDevelopment-max"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <div class="station-card" data-station="storageManagement">
-        <h2>Storage Management</h2>
-        <img src="./src/Storage_management.png" alt="Storage Management" />
-        <p>Level: <span class="station-level">0</span></p>
-        <input type="range" min="0" max="5" value="0" class="station-slider" />
-        <div class="charts-row">
-          <div class="chart-container">
-            <h3>Next Upgrade</h3>
-            <canvas id="chart-storageManagement-next"></canvas>
-          </div>
-          <div class="chart-container">
-            <h3>Max Out</h3>
-            <canvas id="chart-storageManagement-max"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <div class="station-card" data-station="teleporterArray">
-        <h2>Teleporter Array</h2>
-        <img src="./src/Teleporter_array.png" alt="Teleporter Array" />
-        <p>Level: <span class="station-level">0</span></p>
-        <input type="range" min="0" max="5" value="0" class="station-slider" />
-        <div class="charts-row">
-          <div class="chart-container">
-            <h3>Next Upgrade</h3>
-            <canvas id="chart-teleporterArray-next"></canvas>
-          </div>
-          <div class="chart-container">
-            <h3>Max Out</h3>
-            <canvas id="chart-teleporterArray-max"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <div class="station-card" data-station="personalTunnel">
-        <h2>Personal Tunnel</h2>
-        <img src="./src/Personal_tunnel.png" alt="Personal Tunnel" />
-        <p>Level: <span class="station-level">0</span></p>
-        <input type="range" min="0" max="5" value="0" class="station-slider" />
-        <div class="charts-row">
-          <div class="chart-container">
-            <h3>Next Upgrade</h3>
-            <canvas id="chart-personalTunnel-next"></canvas>
-          </div>
-          <div class="chart-container">
-            <h3>Max Out</h3>
-            <canvas id="chart-personalTunnel-max"></canvas>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="grand-chart-section">
-      <h2>Complete Game Requirements</h2>
-      <canvas id="chart-grand-total"></canvas>
-    </section>
-  </main>
-
-  <script src="script.js"></script>
-
-
-  <footer id="credits">
-    <p>Website coded and designed by <strong>LytexWZ</strong></p>
-    <div class="credit-links">
-      <a href="https://github.com/LytexWZ" target="_blank">
-        <img src="./src/github-icon.png" alt="GitHub" class="credit-icon"> LytexWZ
-      </a>
-      <span>
-        <img src="./src/discord-icon.png" alt="Discord" class="credit-icon"> Lytexjb
-      </span>
     </div>
-  </footer>
-  
+
+
+        <div class="card fade-in">
+            <img src="./src/Lytex.jpg" alt="Profile Picture" class="profile-pic">
+            <h2>Contact</h2>
+            <p>Report any issues or improve the tools with any suggestions.</p>
+            <div class="links">
+                <a href="https://github.com/LytexWZ" class="btn social">GitHub</a>
+                <a href="https://discordlookup.com/user/1267873791007129623" class="btn social">Discord</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
