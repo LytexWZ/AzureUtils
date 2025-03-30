@@ -1,4 +1,3 @@
-/* Reset and Centering */
 body {
     font-family: Arial, sans-serif;
     text-align: center;
@@ -14,7 +13,6 @@ body {
     padding-top: 50px;
   }
   
-  /* Animated Background */
   .background {
     position: fixed;
     top: 0;
@@ -27,14 +25,12 @@ body {
     z-index: -1;
   }
   
-  /* Container for cards */
   .container {
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
   
-  /* Card Design */
   .card {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
@@ -49,7 +45,6 @@ body {
     position: relative;
   }
   
-  /* Profile Picture */
   .profile-pic {
     width: 80px;
     height: 80px;
@@ -59,14 +54,12 @@ body {
     border: 3px solid rgba(255, 255, 255, 0.2);
   }
   
-  /* Hover effect on cards */
   .card:hover {
     transform: translateY(0);
   }
   
-  /* Button Base Styles */
   .btn {
-    width: 150px; /* Fixed width for consistency */
+    width: 150px;
     padding: 15px 0;
     background: #08b5bb;
     color: white;
@@ -81,24 +74,20 @@ body {
     background: #148c9c;
   }
   
-  /* Flex container for button groups */
   .btn-group {
     display: flex;
     justify-content: center;
     gap: 10px;
   }
   
-  /* Extra Links Container */
   .extra-links {
     margin-top: 35px;
   }
   
-  /* Extra spacing for second row */
   .extra-double {
     margin-bottom: 10px;
   }
   
-  /* Special Button Styles */
   .trade {
     background: #e06620;
   }
@@ -132,7 +121,6 @@ body {
     background: #0aada0;
   }
   
-  /* Animations */
   @keyframes fadeIn {
     from {
       opacity: 0;
