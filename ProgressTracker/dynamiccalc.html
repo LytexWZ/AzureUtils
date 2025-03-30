@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Azure Mines Upgrade Calculator</title>
+  <link rel="icon" type="image/png" href="../src/Lytex.jpg">
+  <link rel="stylesheet" href="stylefr.css" />
+  <script src="../data/gameData.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Azure Mines Upgrade Tracker</h1>
+    <p id="instructions">Use the sliders to adjust levels and view upgrade requirements by toggling the dropdowns. <br>
+         Toggle inventory to input your resources and get a more accurate result.</p>
+
+    <div class="progress-container">
+      <label for="game-progress">Game Completion:</label>
+      <progress id="game-progress" value="0" max="100"></progress>
+      <span id="progress-percentage">0%</span>
+    </div>
+    <button id="toggle-inventory">Show Inventory</button>
+
+    <div id="inventory-section" class="inventory-container hidden">
+    </div>
+  </header>
+
+  <main>
+    <section class="stations-container">
+      <div class="station-card" data-station="miningOperation">
+        <h2>Mining Operation</h2>
+        <img src="../src/mining_operation.png" alt="Mining Operation" />
+        <p>Level: <span class="station-level">0</span></p>
+        <input type="range" min="0" max="27" value="0" class="station-slider" />
+        <button class="toggle-requirements">Toggle Requirements</button>
+        <div class="requirements-container hidden">
+          <div class="req-section">
+            <h3>Next Upgrade</h3>
+            <div class="req-list" data-type="next"></div>
+          </div>
+          <div class="req-section">
+            <h3>Max Out</h3>
+            <div class="req-list" data-type="max"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="station-card" data-station="dataAndAnalysis">
+        <h2>Data &amp; Analysis</h2>
+        <img src="../src/data_analysis.png" alt="Data &amp; Analysis" />
+        <p>Level: <span class="station-level">0</span></p>
+        <input type="range" min="0" max="17" value="0" class="station-slider" />
+        <button class="toggle-requirements">Toggle Requirements</button>
+        <div class="requirements-container hidden">
+          <div class="req-section">
+            <h3>Next Upgrade</h3>
+            <div class="req-list" data-type="next"></div>
+          </div>
+          <div class="req-section">
+            <h3>Max Out</h3>
+            <div class="req-list" data-type="max"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="station-card" data-station="marketplace">
+        <h2>Marketplace</h2>
+        <img src="../src/marketplace.png" alt="Marketplace" />
+        <p>Level: <span class="station-level">0</span></p>
+        <input type="range" min="0" max="14" value="0" class="station-slider" />
+        <button class="toggle-requirements">Toggle Requirements</button>
+        <div class="requirements-container hidden">
+          <div class="req-section">
+            <h3>Next Upgrade</h3>
+            <div class="req-list" data-type="next"></div>
+          </div>
+          <div class="req-section">
+            <h3>Max Out</h3>
+            <div class="req-list" data-type="max"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="station-card" data-station="researchAndDevelopment">
+        <h2>Research &amp; Development</h2>
+        <img src="../src/research_development.png" alt="Research &amp; Development" />
+        <p>Level: <span class="station-level">0</span></p>
+        <input type="range" min="0" max="15" value="0" class="station-slider" />
+        <button class="toggle-requirements">Toggle Requirements</button>
+        <div class="requirements-container hidden">
+          <div class="req-section">
+            <h3>Next Upgrade</h3>
+            <div class="req-list" data-type="next"></div>
+          </div>
+          <div class="req-section">
+            <h3>Max Out</h3>
+            <div class="req-list" data-type="max"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="station-card" data-station="storageManagement">
+        <h2>Storage Management</h2>
+        <img src="../src/storage_management.png" alt="Storage Management" />
+        <p>Level: <span class="station-level">0</span></p>
+        <input type="range" min="0" max="16" value="0" class="station-slider" />
+        <button class="toggle-requirements">Toggle Requirements</button>
+        <div class="requirements-container hidden">
+          <div class="req-section">
+            <h3>Next Upgrade</h3>
+            <div class="req-list" data-type="next"></div>
+          </div>
+          <div class="req-section">
+            <h3>Max Out</h3>
+            <div class="req-list" data-type="max"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="station-card" data-station="teleporterArray">
+        <h2>Teleporter Array</h2>
+        <img src="../src/teleporter_array.png" alt="Teleporter Array" />
+        <p>Level: <span class="station-level">0</span></p>
+        <input type="range" min="0" max="1" value="0" class="station-slider" />
+        <button class="toggle-requirements">Toggle Requirements</button>
+        <div class="requirements-container hidden">
+          <div class="req-section">
+            <h3>Next Upgrade</h3>
+            <div class="req-list" data-type="next"></div>
+          </div>
+          <div class="req-section">
+            <h3>Max Out</h3>
+            <div class="req-list" data-type="max"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="station-card" data-station="personalTunnel">
+        <h2>Personal Tunnel</h2>
+        <img src="../src/personal_tunnel.png" alt="Personal Tunnel" />
+        <p>Level: <span class="station-level">0</span></p>
+        <input type="range" min="0" max="1" value="0" class="station-slider" />
+        <button class="toggle-requirements">Toggle Requirements</button>
+        <div class="requirements-container hidden">
+          <div class="req-section">
+            <h3>Next Upgrade</h3>
+            <div class="req-list" data-type="next"></div>
+          </div>
+          <div class="req-section">
+            <h3>Max Out</h3>
+            <div class="req-list" data-type="max"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grand-requirements-section">
+      <h2>Complete Game Requirements</h2>
+      <div id="complete-game-requirements" class="requirements-container"></div>
+    </section>
+  </main>
+
+  <script src="calc.js"></script>
+  
+  <footer id="credits">
+    <p>Website coded and designed by <strong>LytexWZ</strong></p>
+    <div class="credit-links">
+      <a href="https://github.com/LytexWZ" target="_blank">
+        <img src="../../src/github-icon.png" alt="GitHub" class="credit-icon"> LytexWZ
+      </a>
+      <span>
+        <img src="../../src/discord-icon.png" alt="Discord" class="credit-icon"> Lytexjb
+      </span>
+    </div>
+  </footer>
+</body>
+</html>
