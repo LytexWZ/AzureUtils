@@ -7,4 +7,7 @@ Please report any bug or error via github or discord
 
 Last changes: 
 
-- Updated the icons to have better quality
+v1.0 released!
+- Created a landing page to hold all the tools
+- Updated the progress tracker to display a list with the ores instead of graphic charts
+- Fixed all the bugs reported in beta testing
