@@ -32,6 +32,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.querySelectorAll(".ore-input").forEach(input => {
+        
+        const saved = localStorage.getItem(input.id);
+        if (saved !== null) input.value = saved;
+        
+        input.addEventListener('input', function() {
+            localStorage.setItem(input.id, input.value);
+        });
+        
         input.addEventListener("input", updateValues);
     });
 
