@@ -1,12 +1,19 @@
+/* ====== Base & Layout ====== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   background: linear-gradient(270deg, #2c3e50, #4ca1af);
   background-size: 400% 400%;
   animation: BackgroundAnimation 15s ease infinite;
-  color: white;
+  color: #e0e6ed;
   font-family: Arial, sans-serif;
-  text-align: center;
   margin: 0;
   padding: 20px;
+  text-align: center;
 }
 
 @keyframes BackgroundAnimation {
@@ -15,82 +22,408 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-h1 {
-  margin-bottom: 15px;
+/* ====== Titles ====== */
+.title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
 }
 
+.title-container h1,
+h1 {
+  color: #e0e6ef;
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin: 32px 0 0 0;
+}
+
+/* ====== Switch Box ====== */
+#mode-toggle-box {
+  background: #23272b;
+  border: 1px solid #3fa7ff;
+  border-radius: 8px;
+  padding: 18px 18px 10px 18px;
+  margin-bottom: 22px;
+  max-width: 420px;
+  color: #e0e6ef;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.toggle-description {
+  margin-top: 10px;
+  font-size: 0.95em;
+  color: #8fa7c2;
+}
+
+/* ====== Switch ====== */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  vertical-align: middle;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 24px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: #7fff7f;
+}
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+/* ====== Help Button ====== */
+#help-btn {
+  font-size: 1.1em;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: #3fa7ff;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+/* ====== Trade Layout ====== */
 .trade-container {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 32px;
   padding: 10px;
-  max-width: 2100px;
+  max-width: 1800px;
   margin: auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .trade-box {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 20px;
-  border-radius: 8px;
-  width: 50%;
-}
-
-h2 {
-  margin-bottom: 15px;
+  background: #23272b;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18), 0 1.5px 4px rgba(0,0,0,0.13);
+  padding: 32px 24px 24px 24px;
+  width: 48%;
+  min-width: 340px;
+  max-width: 900px;
+  color: #e0e6ed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .ore-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 20px;
-  padding: 10px;
-}
-
-.ore-row {
-  padding: 4px 8px;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 22px 24px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+  justify-items: stretch;
 }
 
 .ore-item {
   display: flex;
   align-items: center;
-  background-color: #222;
-  padding: 6px;
-  border-radius: 5px;
-  font-size: 14px;
-  width: 100%;
-  justify-content: space-between;
+  background: #23272b;
+  border-radius: 10px;
+  padding: 12px 18px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+  font-size: 16px;
+  min-width: 0;
+  box-sizing: border-box;
+  gap: 14px;
+  overflow: hidden;
+  width: 350px;
+  height: 40px;
 }
 
 .ore-icon {
-  width: 28px;
-  height: 28px;
-  margin-right: 5px;
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  border-radius: 6px;
+  background: #181c20;
+  padding: 2px;
+  flex-shrink: 0;
 }
 
 .ore-name {
-  flex: 1;
+  flex: 1 1 auto;
   text-align: left;
+  color: #e0e6ed;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .ore-input {
-  width: 50px;
-  padding: 4px;
-  text-align: center;
-  -moz-appearance: textfield;
+  width: 70px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #3a3f44;
+  border-radius: 6px;
+  background: #181c20;
+  color: #e0e6ed;
+  font-size: 1em;
+  text-align: right;
+  transition: border 0.2s;
+  margin-left: 8px;
 }
-
+.ore-input:focus {
+  border: 1.5px solid #4ca1af;
+  outline: none;
+}
 .ore-input::-webkit-outer-spin-button,
 .ore-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
-.ore-value {
-  color: #0f0;
-  font-weight: bold;
-  text-align: right;
+.ore-input[type="number"] {
+  -moz-appearance: textfield;
 }
 
+.ore-value-combined,
+.ore-value,
+.ore-exact-value,
+.ore-rounded-value {
+  font-family: inherit;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-left: 8px;
+  transition: color 0.2s;
+}
+
+.ore-value {
+  color: #4ca1af;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.ore-exact-value {
+  color: #3fa7ff;
+}
+.ore-rounded-value {
+  color: #7fff7f;
+}
+
+/* ====== Modal ====== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0; width: 100%; height: 100%;
+  overflow: auto;
+  background-color: rgba(20,24,32,0.85);
+}
+.modal-content {
+  background-color: #232b36;
+  margin: 8% auto;
+  padding: 24px 28px;
+  border: 1px solid #3fa7ff;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 420px;
+  position: relative;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+  color: #e0e6ef;
+  text-align: center;
+}
+.modal-content ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.modal-content ul li {
+  padding: 8px 0;
+  text-align: center;
+}
+.close {
+  color: #8fa7c2;
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.close:hover { color: #3fa7ff; }
+
+/* ====== Multiplier Modal Overlay (for specific ore) ====== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  z-index: 1100;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(20,24,32,0.85);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-overlay .modal-content {
+  background-color: #232b36;
+  border: 1px solid #3fa7ff;
+  border-radius: 10px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+  color: #e0e6ef;
+  padding: 24px 28px;
+  max-width: 420px;
+  width: 90vw;
+  position: relative;
+  text-align: center;
+}
+
+.modal-close {
+  color: #8fa7c2;
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.modal-close:hover { color: #3fa7ff; }
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 18px;
+}
+.modal-actions button {
+  background: #3fa7ff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 1em;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+.modal-actions button:hover {
+  background: #7fff7f;
+  color: #232b36;
+}
+
+#modal-multiplier-input {
+  background: #181c20;
+  color: #e0e6ed;
+  border: 1px solid #3a3f44;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 1em;
+  width: 90px;
+  text-align: right;
+  transition: border 0.2s;
+}
+#modal-multiplier-input:focus {
+  border: 1.5px solid #4ca1af;
+  outline: none;
+}
+
+#modal-multiplier-input::-webkit-outer-spin-button,
+#modal-multiplier-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+#modal-multiplier-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ====== Responsive ====== */
+@media (max-width: 1200px) {
+  .trade-container {
+    gap: 16px;
+    max-width: 98vw;
+  }
+  .trade-box {
+    min-width: 320px;
+    padding: 24px 8px 16px 8px;
+    max-width: 100vw;
+  }
+  .ore-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px 12px;
+  }
+}
+
+@media (max-width: 900px) {
+  .trade-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+    max-width: 100vw;
+    padding: 0;
+  }
+  .trade-box {
+    width: 98vw;
+    min-width: 0;
+    padding-left: 0;
+    padding-right: 0;
+    max-width: 100vw;
+  }
+  .ore-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px 8px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .ore-grid {
+    grid-template-columns: 1fr;
+    gap: 8px 0;
+    width: 100%;
+  }
+  .trade-box {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* ====== Misc ====== */
 #credits {
   color: white;
   text-align: center;
@@ -119,4 +452,25 @@ h2 {
   width: 24px;
   height: 24px;
   margin-right: 8px;
+}
+
+.global-multiplier {
+  margin-bottom: 10px;
+  font-size: 1em;
+  text-align: left;
+}
+
+.global-multiplier label {
+  color: #e0e6ed;
+  margin-right: 8px;
+}
+
+.global-multiplier input {
+  background: #181c20;
+  color: #e0e6ed;
+  border: 1px solid #3a3f44;
+  border-radius: 6px;
+  padding: 5px 8px;
+  width: 70px;
+  font-size: 1em;
 }
