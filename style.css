@@ -1,3 +1,7 @@
+html, body {
+  height: 100%;
+}
+
 body {
     font-family: Arial, sans-serif;
     text-align: center;
@@ -8,7 +12,7 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    overflow: hidden;
+    overflow-y: auto;
     position: relative;
     padding-top: 50px;
   }
