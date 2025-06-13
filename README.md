@@ -10,7 +10,11 @@ Please report any bug or error via github or discord
 
 Last changes: 
 
-v1.0 released!
-- Created a landing page to hold all the tools
-- Updated the progress tracker to display a list with the ores instead of graphic charts
-- Fixed all the bugs reported in beta testing
+v2.0 beta released!
+- Revamped the UI
+- Added rounded values
+- Added per ore multipliers
+- Added global multipliers (WIP)
+- Instructions added
+
+- Updated the value list
