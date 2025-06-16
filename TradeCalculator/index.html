@@ -8,26 +8,33 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <a href="./../index.html" id="home-btn" title="Home">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+          <path d="M3 11L12 4L21 11" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M5 11V20H19V11" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="10" y="15" width="4" height="5" fill="#fff"/>
+        </svg>
+    </a>
     <div class="title-container">
-  <h1>Trade Calculator</h1>
-  <button id="help-btn" title="Show instructions">?</button>
-</div>
-<div id="mode-toggle-box">
-  <div style="display: flex; align-items: center; gap: 10px;">
-    <label class="switch">
-      <input type="checkbox" id="mode-toggle">
-      <span class="slider"></span>
-    </label>
-    <span style="vertical-align: middle;">
-      Show Rounded Values
-    </span>
-  </div>
-  <div class="toggle-description">
-    Switch between showing exact (blue) and rounded (light green) ore values.
-  </div>
-</div>
+        <h1>Trade Calculator</h1>
+        <button id="help-btn" title="Show instructions">?</button>
+    </div>
+    <div id="mode-toggle-box">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <label class="switch">
+                <input type="checkbox" id="mode-toggle">
+                <span class="slider"></span>
+            </label>
+                <span style="vertical-align: middle;">
+                Show Rounded Values
+                </span>
+        </div>
+        <div class="toggle-description">
+            Switch between showing exact (blue) and rounded (light green) ore values.
+        </div>
+    </div>
 
-<div id="help-modal" class="modal">
+    <div id="help-modal" class="modal">
   <div class="modal-content">
     <span class="close" id="close-modal">&times;</span>
     <h2>How to Use the Trade Calculator</h2>
