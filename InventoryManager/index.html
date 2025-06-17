@@ -1,1 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Azure Mines Inventory Manager</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+   <a href="./../index.html" id="home-btn" title="Home">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+    <path d="M3 11L12 4L21 11" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M5 11V20H19V11" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="10" y="15" width="4" height="5" fill="#fff"/>
+  </svg>
+  </a>
 
+  <div class="header-row">
+    <h1>Azure Mines Inventory Manager</h1>
+    <button id="help-btn" title="Show instructions">?</button>
+  </div>
+
+  <div id="stats-menu" class="stats-menu">
+    <div class="stats-row">
+      <span><strong>Total Ores:</strong> <span id="stat-total-ores">0</span></span>
+      <span><strong>Total AV:</strong> <span id="stat-total-av">0</span></span>
+      <span><strong>Highest Value:</strong> <span id="stat-highest-ore">-</span></span>
+      <span><strong>Lowest Value:</strong> <span id="stat-lowest-ore">-</span></span>
+    </div>
+  </div>
+
+  <div id="help-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="close-modal">&times;</span>
+      <h2>How to Use the Inventory Manager</h2>
+      <ul>
+        <li>Enter the amount of each ore you own in the <strong>[ # ]</strong> column.</li>
+        <li><strong>AV%</strong> shows how close you are to 1 Ambrosia Value (AV) for each ore.</li>
+        <li><strong>AVs</strong> is the number of Ambrosia Values you have for that ore.</li>
+        <li>Your data is saved automatically in your browser.</li>
+        <li>Totals and stats are shown above for your entire inventory.</li>
+      </ul>
+      <p>If you have questions or feedback, contact me.</p>
+    </div>
+  </div>
+
+  <div id="market-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="close-market-modal">&times;</span>
+      <h2>Market Info</h2>
+      <p>This ore can be sold and purchased in the market!</p>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="container basic-minerals">
+      <h2 class="table-banner basic-minerals-banner">Basic Minerals</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ore Name</th>
+            <th class="av-percent">AV%</th>
+            <th>[ # ]</th>
+            <th>AVs</th>
+            <th>1 AV</th>
+          </tr>
+        </thead>
+        <tbody id="basic-minerals-tbody"></tbody>
+      </table>
+      <div class="table-stats" id="basic-minerals-stats"></div>
+    </div>
+    <div class="container common-metals">
+      <h2 class="table-banner common-metals-banner">Common Metals</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ore Name</th>
+            <th class="av-percent">AV%</th>
+            <th>[ # ]</th>
+            <th>AVs</th>
+            <th>1 AV</th>
+          </tr>
+        </thead>
+        <tbody id="common-metals-tbody"></tbody>
+      </table>
+      <div class="table-stats" id="common-metals-stats"></div>
+    </div>
+    <div class="container common-jewels">
+      <h2 class="table-banner common-jewels-banner">Common Jewels</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ore Name</th>
+            <th class="av-percent">AV%</th>
+            <th>[ # ]</th>
+            <th>AVs</th>
+            <th>1 AV</th>
+          </tr>
+        </thead>
+        <tbody id="common-jewels-tbody"></tbody>
+      </table>
+      <div class="table-stats" id="common-jewels-stats"></div>
+    </div>
+    <div class="container rare-oddities">
+      <h2 class="table-banner rare-oddities-banner">Rare Oddities</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ore Name</th>
+            <th class="av-percent">AV%</th>
+            <th>[ # ]</th>
+            <th>AVs</th>
+            <th>1 AV</th>
+          </tr>
+        </thead>
+        <tbody id="rare-oddities-tbody"></tbody>
+      </table>
+      <div class="table-stats" id="rare-oddities-stats"></div>
+    </div>
+    <div class="container halloween">
+      <h2 class="table-banner halloween-banner">Halloween</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ore Name</th>
+            <th class="av-percent">AV%</th>
+            <th>[ # ]</th>
+            <th>AVs</th>
+            <th>1 AV</th>
+          </tr>
+        </thead>
+        <tbody id="halloween-tbody"></tbody>
+      </table>
+      <div class="table-stats" id="halloween-stats"></div>
+    </div>
+    <div class="container holidays">
+      <h2 class="table-banner holidays-banner">Holidays</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ore Name</th>
+            <th class="av-percent">AV%</th>
+            <th>[ # ]</th>
+            <th>AVs</th>
+            <th>1 AV</th>
+          </tr>
+        </thead>
+        <tbody id="holidays-tbody"></tbody>
+      </table>
+      <div class="table-stats" id="holidays-stats"></div>
+    </div>
+    <div class="container unstable-forms">
+      <h2 class="table-banner unstable-forms-banner">Unstable Forms</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ore Name</th>
+            <th class="av-percent">AV%</th>
+            <th>[ # ]</th>
+            <th>AVs</th>
+            <th>1 AV</th>
+          </tr>
+        </thead>
+        <tbody id="unstable-forms-tbody"></tbody>
+      </table>
+      <div class="table-stats" id="unstable-forms-stats"></div>
+    </div>
+    <div class="container scary-caverns">
+      <h2 class="table-banner scary-caverns-banner">Scary Caverns (600m - 1000m)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ore Name</th>
+            <th class="av-percent">AV%</th>
+            <th>[ # ]</th>
+            <th>AVs</th>
+            <th>1 AV</th>
+          </tr>
+        </thead>
+        <tbody id="scary-caverns-tbody"></tbody>
+      </table>
+      <div class="table-stats" id="scary-caverns-stats"></div>
+    </div>
+    <div class="container azure-caverns">
+      <h2 class="table-banner azure-caverns-banner">Azure Caverns (1000m - 2000m)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ore Name</th>
+            <th class="av-percent">AV%</th>
+            <th>[ # ]</th>
+            <th>AVs</th>
+            <th>1 AV</th>
+          </tr>
+        </thead>
+        <tbody id="azure-caverns-tbody"></tbody>
+      </table>
+      <div class="table-stats" id="azure-caverns-stats"></div>
+    </div>
+    <div class="container underworld">
+      <h2 class="table-banner underworld-banner">Underworld (2000m - 3000m)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ore Name</th>
+            <th class="av-percent">AV%</th>
+            <th>[ # ]</th>
+            <th>AVs</th>
+            <th>1 AV</th>
+          </tr>
+        </thead>
+        <tbody id="underworld-tbody"></tbody>
+      </table>
+      <div class="table-stats" id="underworld-stats"></div>
+    </div>
+    <div class="container radioactive-zone">
+      <h2 class="table-banner radioactive-zone-banner">Radioactive Zone (3000m - 4000m)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ore Name</th>
+            <th class="av-percent">AV%</th>
+            <th>[ # ]</th>
+            <th>AVs</th>
+            <th>1 AV</th>
+          </tr>
+        </thead>
+        <tbody id="radioactive-zone-tbody"></tbody>
+      </table>
+      <div class="table-stats" id="radioactive-zone-stats"></div>
+    </div>
+    <div class="container dreamscape">
+      <h2 class="table-banner dreamscape-banner">Dreamscape (4000m - 5000m)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ore Name</th>
+            <th class="av-percent">AV%</th>
+            <th>[ # ]</th>
+            <th>AVs</th>
+            <th>1 AV</th>
+          </tr>
+        </thead>
+        <tbody id="dreamscape-tbody"></tbody>
+      </table>
+      <div class="table-stats" id="dreamscape-stats"></div>
+    </div>
+    <div class="container unknown">
+      <h2 class="table-banner unknown-banner">???</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ore Name</th>
+            <th class="av-percent">AV%</th>
+            <th>[ # ]</th>
+            <th>AVs</th>
+            <th>1 AV</th>
+          </tr>
+        </thead>
+        <tbody id="unknown-tbody"></tbody>
+      </table>
+      <div class="table-stats" id="unknown-stats"></div>
+    </div>
+    <div class="container enigmatic-specimens">
+      <h2 class="table-banner enigmatic-specimens-banner">Enigmatic Specimens</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ore Name</th>
+            <th class="av-percent">AV%</th>
+            <th>[ # ]</th>
+            <th>AVs</th>
+            <th>1 AV</th>
+          </tr>
+        </thead>
+        <tbody id="enigmatic-specimens-tbody"></tbody>
+      </table>
+      <div class="table-stats" id="enigmatic-specimens-stats"></div>
+    </div>
+    <div class="container rare-metals">
+      <h2 class="table-banner rare-metals-banner">Rare Metals</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ore Name</th>
+            <th class="av-percent">AV%</th>
+            <th>[ # ]</th>
+            <th>AVs</th>
+            <th>1 AV</th>
+          </tr>
+        </thead>
+        <tbody id="rare-metals-tbody"></tbody>
+      </table>
+      <div class="table-stats" id="rare-metals-stats"></div>
+    </div>
+  </div>
+
+  <footer id="credits">
+    <p>Website coded and designed by <strong>LytexWZ</strong></p>
+    <div class="credit-links">
+      <a href="https://github.com/LytexWZ" target="_blank">
+        <img src="../src/github-icon.png" alt="GitHub" class="credit-icon"> LytexWZ
+      </a>
+      <span>
+        <img src="../src/discord-icon.png" alt="Discord" class="credit-icon"> Lytexjb
+      </span>
+    </div>
+  </footer>
+
+  <script src="../data/values.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
