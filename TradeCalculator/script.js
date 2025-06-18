@@ -2,12 +2,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const offerSection = document.getElementById("offer-section");
     const receiveSection = document.getElementById("receive-section");
 
-    // Multiplier state
     const oreMultipliers = {};
     let globalOfferMultiplier = 1;
     let globalReceiveMultiplier = 1;
 
-    // Modal elements
     const modal = document.getElementById("multiplier-modal");
     const modalCloseBtn = document.getElementById("modal-close-btn");
     const modalResetBtn = document.getElementById("modal-reset-btn");
@@ -18,16 +16,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let currentModalOre = null;
 
-    // Global multiplier inputs
     const globalOfferInput = document.getElementById("global-offer-multiplier");
     const globalReceiveInput = document.getElementById("global-receive-multiplier");
 
     const sortedOres = Object.keys(oreValues).sort();
 
-    // Initialize multipliers
     sortedOres.forEach(ore => oreMultipliers[ore] = 1);
 
-    // Offer section
     sortedOres.forEach(ore => {
         const { icon } = oreValues[ore];
 
@@ -43,7 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
         offerSection.appendChild(oreDiv);
     });
 
-    // Receive section
     sortedOres.forEach(ore => {
         const { icon } = oreValues[ore];
 
@@ -57,7 +51,6 @@ document.addEventListener("DOMContentLoaded", function () {
         receiveSection.appendChild(oreDiv);
     });
 
-    // Ore icon click for multiplier modal
     document.querySelectorAll(".ore-mult-btn").forEach(img => {
         img.addEventListener("click", function (e) {
             const ore = e.target.getAttribute("data-ore");
@@ -65,20 +58,17 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Update multiplier label
     function updateMultiplierLabels() {
         sortedOres.forEach(ore => {
             document.getElementById(`mult-label-${ore}`).innerText = oreMultipliers[ore];
         });
     }
 
-    // Modal logic
     function openMultiplierModal(ore) {
         currentModalOre = ore;
         document.getElementById("modal-ore-title").innerText = ore;
         modalOreIcon.src = oreValues[ore].icon;
         modalMultiplierInput.value = oreMultipliers[ore];
-        // Static description explaining the popup
         document.getElementById("modal-ore-desc").innerHTML = `
             <div>Here you can adjust the multiplier for this ore.</div>
             <div>This will affect your trade calculations.</div>
@@ -108,12 +98,10 @@ document.addEventListener("DOMContentLoaded", function () {
         closeMultiplierModal();
     };
 
-    // Close modal on overlay click (not content)
     modal.addEventListener("click", function (e) {
         if (e.target === modal) closeMultiplierModal();
     });
 
-    // Global multiplier logic
     globalOfferInput.addEventListener("input", function () {
         let val = parseFloat(globalOfferInput.value);
         if (isNaN(val) || val <= 0) val = 1;
@@ -127,7 +115,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updateValues();
     });
 
-    // Ore input logic
     document.querySelectorAll(".ore-input").forEach(input => {
         input.addEventListener("input", updateValues);
     });
@@ -151,8 +138,15 @@ document.addEventListener("DOMContentLoaded", function () {
         sortedOres.forEach(targetOre => {
             const valueSpan = document.getElementById(`value-${targetOre}`);
             if (oreValues[targetOre].AV > 0) {
-                let equivalentAmount = totalAV * oreValues[targetOre].AV;
-                equivalentAmount = equivalentAmount * oreMultipliers[targetOre] * globalReceiveMultiplier;
+                let adjustedAV = oreValues[targetOre].AV * (oreMultipliers[targetOre] || 1);
+                let equivalentAmount = totalAV * adjustedAV;
+
+                if (oreMultipliers[targetOre] !== undefined && oreMultipliers[targetOre] !== 1) {
+                    equivalentAmount /= oreMultipliers[targetOre];
+            }
+
+                equivalentAmount *= globalReceiveMultiplier;
+
                 if (showRounded) {
                     valueSpan.innerText = Math.round(equivalentAmount);
                     valueSpan.classList.add("ore-rounded-value");
@@ -170,10 +164,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Add event listener for toggle
     document.getElementById("mode-toggle").addEventListener("change", updateValues);
 
-    // Show exact values by default on load
     window.addEventListener("DOMContentLoaded", () => {
         document.getElementById("mode-toggle").checked = false;
         updateValues();
@@ -181,7 +173,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     updateMultiplierLabels();
 
-    // Modal logic
     document.getElementById("help-btn").onclick = function() {
       document.getElementById("help-modal").style.display = "block";
     };
