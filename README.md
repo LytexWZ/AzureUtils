@@ -10,11 +10,6 @@ Please report any bug or error via github or discord
 
 Last changes: 
 
-v1.0 released!
-- Finally added the inventory manager
-- Now you can track the values of your ores
-- Added a clean interface
-- AV values updated to June
-- Instructions added
+- AV values updated to September 6, 2025
 
 - Updated the value list tio fix some typo's
