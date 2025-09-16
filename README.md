@@ -11,5 +11,3 @@ Please report any bug or error via github or discord
 Last changes: 
 
 - AV values updated to September 6, 2025
-
-- Updated the value list tio fix some typo's
