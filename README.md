@@ -10,4 +10,13 @@ Please report any bug or error via github or discord
 
 Last changes: 
 
-- AV values updated to September 6, 2025
+- Trade calculator v2 released!
+
+This tool is still in beta, and mozilla Firefozx browser breakes it entirely
+
+New theme
+New display with a compact layout to ignore unwanted ores
+New selection for the ores
+New Fair mode (WIP)
+New accurate description for each ore
+

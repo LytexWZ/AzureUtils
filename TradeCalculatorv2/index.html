@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Azure Mines Trading Calculator</title>
+    <link rel="icon" type="image/png" href="../src/Lytex.jpg">
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+
+    <div id="beta-warning">
+        ⚠️ Warning! This tool is still in beta. Bugs expected. Mozilla Firefox is NOT supported.
+    </div>
+
+    <div class="container">
+      <header class="header">
+        <div class="header-left">
+          <div class="logo">
+            <img src="../src/logo.png" alt="Calculator Logo" />
+          </div>
+          <h1>Azure Mines Trading Calculator</h1>
+        </div>
+        <div class="header-right">
+          <div class="toggle-group">
+            <span>Round Numbers</span>
+            <label class="toggle">
+              <input type="checkbox" id="roundNumbers" />
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="toggle-group">
+            <span>Fair Mode</span>
+            <label class="toggle">
+              <input type="checkbox" id="fairMode" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+          <button class="clear-all-btn" id="clearAll"><img src="../src/clear.png" class="btnIcon"/> <span>&#8192</span> Clear All</button>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <section class="input-section">
+          <div class="section-header">
+            <h2>Given ores</h2>
+            <button class="add-btn" id="addInputOre">Add Ore</button>
+          </div>
+          <div class="ore-list" id="inputOres"></div>
+          <div class="total-av">
+            <strong>Total AV: <span id="totalAV">0</span></strong>
+          </div>
+        </section>
+
+        <section class="output-section">
+          <div class="section-header">
+            <h2>Obtained Ores</h2>
+            <div class="output-buttons">
+              <button class="save-btn" id="saveConfig"><img src="../src/save.png" class="btnIcon"/> <span>&#8192</span> Save</button>
+              <button class="load-btn" id="loadConfig"><img src="../src/load.png" class="btnIcon"/> <span>&#8192</span> Load</button>
+              <button class="add-btn" id="addOutputOre">Add Ore</button>
+            </div>
+          </div>
+          <div class="ore-list" id="outputOres"></div>
+          <div class="total-gain" id="totalGain" style="display: none">
+            <strong>Total Gain: 0 AV (0%)</strong>
+          </div>
+        </section>
+      </main>
+
+      <div class="modal" id="oreModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Select Input Ore</h3>
+            <button class="close-btn" id="closeModal">&times;</button>
+          </div>
+          <div class="search-bar">
+            <input
+              type="text"
+              id="oreSearch"
+              placeholder="🔍 Search ores..."
+              autocomplete="off"
+            />
+            <select id="sortSelect" class="sort-select">
+              <option value="alphabetical">Alphabetical</option>
+              <option value="rarity">Rarity (Low to High)</option>
+              <option value="rarity-desc">Rarity (High to Low)</option>
+              <option value="random">Random</option>
+            </select>
+          </div>
+          <div class="recent-ores">
+            <h4>Recent Ores</h4>
+            <div class="recent-grid" id="recentGrid"></div>
+          </div>
+          <div class="ore-grid-container">
+            <div class="ore-grid" id="oreGrid"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal" id="saveLoadModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="saveLoadTitle">Save Configuration</h3>
+            <button class="close-btn" id="closeSaveLoadModal">&times;</button>
+          </div>
+          <div class="save-load-content">
+            <div id="saveContent">
+              <label for="configName">Configuration Name:</label>
+              <input
+                type="text"
+                id="configName"
+                placeholder="Enter configuration name..."
+              />
+              <button class="save-config-btn" id="saveConfigBtn">
+                Save Configuration
+              </button>
+            </div>
+            <div id="loadContent">
+              <h4>Saved Configurations:</h4>
+              <div class="config-list" id="configList"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <footer id="credits">
+    <p>Website coded and designed by <strong>LytexWZ</strong></p>
+    <div class="credit-links">
+      <a href="https://github.com/LytexWZ" target="_blank">
+        <img src="../src/github-icon.png" alt="GitHub" class="credit-icon"> LytexWZ
+      </a>
+      <span>
+        <img src="../src/discord-icon.png" alt="Discord" class="credit-icon"> Lytexjb
+      </span>
+    </div>
+  </footer>
+
+    <script src="../data/values.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
