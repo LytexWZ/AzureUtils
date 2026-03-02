@@ -15,9 +15,14 @@
           <rect x="10" y="15" width="4" height="5" fill="#fff"/>
         </svg>
     </a>
-    <div class="title-container">
-        <h1>Trade Calculator</h1>
-        <button id="help-btn" title="Show instructions">?</button>
+    <div class="title-container window">
+        <div class="title-bar">
+            <div class="title-bar-text">Trade Calculator</div>
+            <div class="title-bar-controls">
+                <button aria-label="Help" id="help-btn"></button>
+                <button aria-label="Minimize"></button>
+            </div>
+        </div>
     </div>
     <div id="mode-toggle-box">
         <div style="display: flex; align-items: center; gap: 10px;">
@@ -35,51 +40,79 @@
     </div>
 
     <div id="help-modal" class="modal">
-  <div class="modal-content">
-    <span class="close" id="close-modal">&times;</span>
-    <h2>How to Use the Trade Calculator</h2>
+  <div class="modal-content window">
+    <div class="title-bar">
+      <div class="title-bar-text">How to Use the Trade Calculator</div>
+      <div class="title-bar-controls">
+        <button aria-label="Close" id="close-modal"></button>
+      </div>
+    </div>
+    <div class="window-body">
     <ul>
       <li>Enter the amount of each ore you want to offer in the left section.</li>
       <li>The calculator will show you the equivalent value of each ore you can receive on the right.</li>
       <li>All calculations are automatic as you type.</li>
-      <li>Use the switch below to toggle between <span style="color:#3fa7ff;">exact</span> and <span style="color:#7fff7f;">rounded</span> values.</li>
+      <li>Use the switch below to toggle between <span style="color:navy;">exact</span> and <span style="color:green;">rounded</span> values.</li>
       <li>Adjust multipliers for each ore by clicking in the ore icons</li>
     </ul>
     <p>If you have questions or feedback, contact me.</p>
+    </div>
   </div>
 </div>
     <div class="trade-container">
-        <div class="trade-box">
-            <h2>Your Offer</h2>
+        <div class="trade-box window">
+            <div class="title-bar">
+                <div class="title-bar-text">Your Offer</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Help" id="offer-help-btn"></button>
+                    <button aria-label="Minimize"></button>
+                </div>
+            </div>
+            <div class="window-body">
             <div class="global-multiplier">
                 <label>Global Offer Multiplier:</label>
                 <input type="number" id="global-offer-multiplier" value="1" min="0.01" step="0.01" class="ore-input">
             </div>
             <div id="offer-section" class="ore-grid"></div>
+            </div>
         </div>
-        <div class="trade-box">
-            <h2>Equivalent Exchange</h2>
+        <div class="trade-box window">
+            <div class="title-bar">
+                <div class="title-bar-text">Equivalent Exchange</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Help" id="equivalent-help-btn"></button>
+                    <button aria-label="Minimize"></button>
+                </div>
+            </div>
+            <div class="window-body">
             <div class="global-multiplier">
                 <label>Global Receive Multiplier:</label>
                 <input type="number" id="global-receive-multiplier" value="1" min="0.01" step="0.01" class="ore-input">
             </div>
             <div id="receive-section" class="ore-grid"></div>
+            </div>
         </div>
     </div>
 
-    <div id="multiplier-modal" class="modal-overlay" style="display:none;">
-        <div class="modal-content">
-            <button class="modal-close" id="modal-close-btn">&times;</button>
+    <div id="multiplier-modal" class="modal-overlay">
+        <div class="modal-content window">
+            <div class="title-bar">
+                <div class="title-bar-text">Ore Multiplier Settings</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Close" id="modal-close-btn"></button>
+                </div>
+            </div>
+            <div class="window-body">
             <div class="modal-body">
-                <h3 id="modal-title" style="margin-top:0;margin-bottom:18px;font-size:1.35em;font-weight:700;">
-                    Modifying values for <span id="modal-ore-title" style="color:#4ca1af;">ORENAME</span>
+                <h3 id="modal-title" style="margin-top:0;margin-bottom:18px;font-size:1.2em;font-weight:700;">
+                    <span id="modal-ore-title" style="color:navy;">ORENAME</span>
                 </h3>
                 <img id="modal-ore-icon" class="ore-icon" src="" style="width:64px;height:64px;display:block;margin:0 auto 12px auto;">
-                <div id="modal-ore-desc" style="margin-bottom:16px;text-align:center;line-height:1.4;">
+                <div id="modal-ore-desc" style="margin-bottom:16px;text-align:center;line-height:1.4;font-size:11px;">
                     <div>Here you can adjust the multiplier for this ore.</div>
                     <div>This will affect your trade calculations.</div>
                 </div>
-                <label style="display:block;margin-bottom:18px;">
+                <label style="display:block;margin-bottom:18px;font-size:11px;">
                     Multiplier: <input type="number" id="modal-multiplier-input" min="0.01" step="0.01">
                 </label>
             </div>
@@ -87,11 +120,51 @@
                 <button id="modal-reset-btn">Reset</button>
                 <button id="modal-save-btn">Save</button>
             </div>
+            </div>
         </div>
     </div>
 
     <script src="../data/values.js"></script>
     <script src="script.js"></script>
+
+    <div id="offer-help-modal" class="modal">
+        <div class="modal-content window">
+            <div class="title-bar">
+                <div class="title-bar-text">Your Offer - Help</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Close" id="close-offer-modal"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <ul>
+                    <li>Enter the amount of each ore you want to include in your offer.</li>
+                    <li>Click on any ore icon to set a custom multiplier for that specific ore.</li>
+                    <li>The multiplier affects how the ore value is calculated in the equivalent exchange.</li>
+                    <li>You can mix different ore types to create your desired trade offer.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="equivalent-help-modal" class="modal">
+        <div class="modal-content window">
+            <div class="title-bar">
+                <div class="title-bar-text">Equivalent Exchange - Help</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Close" id="close-equivalent-modal"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <ul>
+                    <li>This section shows the equivalent amounts you can receive for each ore type based on your offer.</li>
+                    <li>Values are automatically calculated as you type in the "Your Offer" section.</li>
+                    <li><span style="color:navy;">Blue values</span> show exact calculations.</li>
+                    <li><span style="color:green;">Green values</span> show rounded amounts (toggle with the switch at the top).</li>
+                    <li>These values help you determine fair trades for different ore types.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
     <footer id="credits">
         <p>Website coded and designed by <strong>LytexWZ</strong></p>

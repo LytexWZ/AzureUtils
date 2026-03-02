@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const modalResetBtn = document.getElementById("modal-reset-btn");
     const modalSaveBtn = document.getElementById("modal-save-btn");
     const modalOreIcon = document.getElementById("modal-ore-icon");
-    const modalOreName = document.getElementById("modal-ore-name");
+    const modalOreTitle = document.getElementById("modal-ore-title");
     const modalMultiplierInput = document.getElementById("modal-multiplier-input");
 
     let currentModalOre = null;
@@ -69,16 +69,12 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("modal-ore-title").innerText = ore;
         modalOreIcon.src = oreValues[ore].icon;
         modalMultiplierInput.value = oreMultipliers[ore];
-        document.getElementById("modal-ore-desc").innerHTML = `
-            <div>Here you can adjust the multiplier for this ore.</div>
-            <div>This will affect your trade calculations.</div>
-        `;
-        modal.style.display = "flex";
+        modal.classList.add("active");
         document.body.style.overflow = "hidden";
     }
 
     function closeMultiplierModal() {
-        modal.style.display = "none";
+        modal.classList.remove("active");
         document.body.style.overflow = "";
         currentModalOre = null;
     }
@@ -174,14 +170,44 @@ document.addEventListener("DOMContentLoaded", function () {
     updateMultiplierLabels();
 
     document.getElementById("help-btn").onclick = function() {
-      document.getElementById("help-modal").style.display = "block";
+      const helpModal = document.getElementById("help-modal");
+      helpModal.style.display = "flex";
     };
     document.getElementById("close-modal").onclick = function() {
-      document.getElementById("help-modal").style.display = "none";
+      const helpModal = document.getElementById("help-modal");
+      helpModal.style.display = "none";
     };
+    
+    document.getElementById("offer-help-btn").onclick = function() {
+      const offerHelpModal = document.getElementById("offer-help-modal");
+      offerHelpModal.style.display = "flex";
+    };
+    document.getElementById("close-offer-modal").onclick = function() {
+      const offerHelpModal = document.getElementById("offer-help-modal");
+      offerHelpModal.style.display = "none";
+    };
+    
+    document.getElementById("equivalent-help-btn").onclick = function() {
+      const equivalentHelpModal = document.getElementById("equivalent-help-modal");
+      equivalentHelpModal.style.display = "flex";
+    };
+    document.getElementById("close-equivalent-modal").onclick = function() {
+      const equivalentHelpModal = document.getElementById("equivalent-help-modal");
+      equivalentHelpModal.style.display = "none";
+    };
+    
     window.onclick = function(event) {
-      if (event.target == document.getElementById("help-modal")) {
-        document.getElementById("help-modal").style.display = "none";
+      const helpModal = document.getElementById("help-modal");
+      const offerHelpModal = document.getElementById("offer-help-modal");
+      const equivalentHelpModal = document.getElementById("equivalent-help-modal");
+      if (event.target == helpModal) {
+        helpModal.style.display = "none";
+      }
+      if (event.target == offerHelpModal) {
+        offerHelpModal.style.display = "none";
+      }
+      if (event.target == equivalentHelpModal) {
+        equivalentHelpModal.style.display = "none";
       }
     };
 });
