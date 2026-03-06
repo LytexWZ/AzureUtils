@@ -155,3 +155,5 @@ const ores = [
   { id: 'uranium', name: 'Uranium', icon: '../src/Uranium.png', owned: 0 },
   { id: 'yunium', name: 'Yunium', icon: '../src/Yunium.png', owned: 0 }
 ];
+
+window.ores = ores;

@@ -3,182 +3,1920 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Azure Mines Upgrade Calculator</title>
+  <title>Azure Mines Dashboard</title>
   <link rel="icon" type="image/png" href="../src/Lytex.jpg">
   <link rel="stylesheet" href="stylefr.css" />
   <script src="../data/gameData.js"></script>
+  <script src="../data/values.js"></script>
 </head>
 <body>
-  <a href="./../index.html" id="home-btn" title="Home">
-  <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-  <path d="M3 11L12 4L21 11" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M5 11V20H19V11" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="10" y="15" width="4" height="5" fill="#fff"/>
-</svg>
-</a>
-  <header>
-    <h1>Azure Mines Upgrade Tracker</h1>
-    <p id="instructions">Use the sliders to adjust levels and view upgrade requirements by toggling the dropdowns. <br>
-         Toggle inventory to input your resources and get a more accurate result.</p>
-
-    <div class="progress-container">
-      <label for="game-progress">Game Completion:</label>
-      <progress id="game-progress" value="0" max="100"></progress>
-      <span id="progress-percentage">0%</span>
+  <!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <div class="top-nav-left">
+      <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="logo">
+        <span class="logo-text">Azure<span class="logo-accent">utils</span></span>
+      </div>
     </div>
-    <button id="toggle-inventory">Show Inventory</button>
-
-    <div id="inventory-section" class="inventory-container hidden">
+    <nav class="top-nav-center">
+      <a href="./../index.html" class="top-nav-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M3 11L12 4L21 11M5 11V20H19V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Home
+      </a>
+      <button class="top-nav-link active" onclick="handleTopNavClick('overview', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" rx="1"/>
+          <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" rx="1"/>
+          <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" rx="1"/>
+        </svg>
+        Progress Tracker
+      </button>
+      <button class="top-nav-link" onclick="handleTopNavClick('inventory-manager', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="3" width="18" height="18" stroke="currentColor" stroke-width="2" rx="2"/>
+          <path d="M9 3V21M15 3V21M3 9H21M3 15H21" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        Inventory Manager
+      </button>
+      <a href="./../TradeCalculatorv2/index.html" class="top-nav-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <rect x="4" y="4" width="16" height="16" stroke="currentColor" stroke-width="2" rx="2"/>
+          <path d="M8 8H16M8 12H16M8 16H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Trade Calculator
+      </a>
+    </nav>
+    <div class="top-nav-right">
+      <div class="status-badge" id="save-status-badge">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="12" cy="12" r="12"/>
+        </svg>
+        <span id="save-status-text">Data not saved</span>
+      </div>
     </div>
   </header>
 
-  <main>
-    <section class="stations-container">
-      <div class="station-card" data-station="miningOperation">
-        <h2>Mining Operation</h2>
-        <img src="../src/Mining_Operation.png" alt="Mining Operation" />
-        <p>Level: <span class="station-level">0</span></p>
-        <input type="range" min="0" max="27" value="0" class="station-slider" />
-        <button class="toggle-requirements">Toggle Requirements</button>
-        <div class="requirements-container hidden">
-          <div class="req-section">
-            <h3>Next Upgrade</h3>
-            <div class="req-list" data-type="next"></div>
+  <!-- Dashboard Container -->
+  <div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1 id="sidebar-title">Progress Panel</h1>
+        <p class="subtitle">By LytexWZ</p>
+      </div>
+      
+      <nav class="nav-menu" id="nav-menu">
+        <div class="nav-section-label">MAIN</div>
+        <button class="nav-item active" data-view="overview">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" rx="1"/>
+          </svg>
+          <span class="nav-label">Dashboard</span>
+        </button>
+        <button class="nav-item" data-view="analytics">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M7 16L12 11L16 15L21 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="nav-label">Analytics</span>
+        </button>
+        
+        <div class="nav-section-label">MANAGEMENT</div>
+        <button class="nav-item" data-view="inventory">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" stroke="currentColor" stroke-width="2" rx="2"/>
+            <path d="M9 3V21M15 3V21M3 9H21M3 15H21" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span class="nav-label">Inventory</span>
+        </button>
+        <button class="nav-item" data-view="stations">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-label">Stations</span>
+          <span class="nav-badge">8</span>
+        </button>
+        
+        <div class="nav-section-label">STATIONS</div>
+        <button class="nav-item" data-view="station" data-station="miningOperation">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m14 13-8.381 8.38a1 1 0 0 1-3.001-3L11 9.999"/>
+            <path d="M15.973 4.027A13 13 0 0 0 5.902 2.373c-1.398.342-1.092 2.158.277 2.601a19.9 19.9 0 0 1 5.822 3.024"/>
+            <path d="M16.001 11.999a19.9 19.9 0 0 1 3.024 5.824c.444 1.369 2.26 1.676 2.603.278A13 13 0 0 0 20 8.069"/>
+            <path d="M18.352 3.352a1.205 1.205 0 0 0-1.704 0l-5.296 5.296a1.205 1.205 0 0 0 0 1.704l2.296 2.296a1.205 1.205 0 0 0 1.704 0l5.296-5.296a1.205 1.205 0 0 0 0-1.704z"/>
+          </svg>
+          <span class="nav-label">Mining Operation</span>
+        </button>
+        <button class="nav-item" data-view="station" data-station="dataAndAnalysis">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M7 16L12 11L16 15L21 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="nav-label">Data & Analysis</span>
+        </button>
+        <button class="nav-item" data-view="station" data-station="marketplace">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"/>
+            <path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"/>
+            <path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"/>
+          </svg>
+          <span class="nav-label">Marketplace</span>
+        </button>
+        <button class="nav-item" data-view="station" data-station="researchAndDevelopment">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+            <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-label">R&D</span>
+        </button>
+        <button class="nav-item" data-view="station" data-station="storageManagement">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" stroke="currentColor" stroke-width="2" rx="2"/>
+            <path d="M3 9H21M9 21V9" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span class="nav-label">Storage</span>
+        </button>
+        <button class="nav-item" data-view="station" data-station="teleporterArray">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="3" fill="currentColor"/>
+            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2" opacity="0.5"/>
+            <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+          </svg>
+          <span class="nav-label">Teleporter</span>
+        </button>
+        <button class="nav-item" data-view="station" data-station="personalTunnel">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M22 12C22 6.5 17.5 2 12 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M12 22C17.5 22 22 17.5 22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-label">Tunnel</span>
+        </button>
+        
+        <div class="nav-section-label">SYSTEM</div>
+        <button class="nav-item" data-view="settings">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span class="nav-label">Settings</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+<!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Overview View -->
+      <div class="view-container active" id="view-overview">
+        <div class="view-header">
+          <h2>Progress Dashboard</h2>
+          <p>Complete picture of your station progress</p>
+        </div>
+        
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <h3>Game Completion</h3>
+            <div class="completion-overview">
+              <div class="completion-percent" id="completion-percent">0%</div>
+              <div id="progress-bars-completion" class="progress-bars-container"></div>
+            </div>
           </div>
-          <div class="req-section">
-            <h3>Max Out</h3>
-            <div class="req-list" data-type="max"></div>
+          
+          <div class="metric-card">
+            <h3>Ore Requirements</h3>
+            <div id="progress-bars-ores" class="progress-bars-container"></div>
+            <div id="excluded-ores" class="excluded-items"></div>
+          </div>
+        </div>
+
+        <div class="stations-progress-card">
+          <h3>Station Progress</h3>
+          <div id="stations-progress-list" class="stations-list"></div>
+        </div>
+
+        <div class="overview-requirements-card">
+          <h3>Total Resources Needed</h3>
+          <div id="overview-requirements" class="requirements-grid"></div>
+        </div>
+      </div>
+
+      <!-- Inventory View -->
+      <div class="view-container" id="view-inventory">
+        <div class="view-header">
+          <div class="view-header-content">
+            <div>
+              <h2>Inventory Management</h2>
+              <p>Track and manage your ore collection</p>
+            </div>
+            <button class="open-full-inventory-btn" onclick="(() => { const topNavBtn = document.querySelector('.top-nav-link[onclick*=\'inventory-manager\']'); handleTopNavClick('inventory-manager', topNavBtn); })()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" stroke="currentColor" stroke-width="2" rx="2"/>
+                <path d="M9 3V21M15 3V21M3 9H21M3 15H21" stroke="currentColor" stroke-width="2"/>
+              </svg>
+              Open Full Inventory
+            </button>
+          </div>
+        </div>
+
+        <div class="inventory-stats-grid">
+          <div class="metric-card">
+            <h3>Inventory Overview</h3>
+            <div id="progress-bars-inventory" class="progress-bars-container"></div>
+            <div id="excluded-inventory" class="excluded-items"></div>
+          </div>
+
+          <div class="inventory-summary-card">
+            <h3>Quick Stats</h3>
+            <div class="stat-row">
+              <span class="stat-label">Ore Types Owned:</span>
+              <span class="stat-value" id="owned-types">0</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Total Value:</span>
+              <span class="stat-value" id="total-value">0</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Most Valuable:</span>
+              <span class="stat-value" id="most-valuable">-</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="inventory-input-card">
+          <h3>Manage Inventory</h3>
+          <div id="inventory-grid" class="inventory-grid"></div>
+        </div>
+      </div>
+
+      <!-- Stations Overview -->
+      <div class="view-container" id="view-stations">
+        <div class="view-header">
+          <h2>All Stations Overview</h2>
+          <p>Visual summary of all base stations and their progress</p>
+        </div>
+
+        <div id="stations-overview-grid" class="stations-overview-grid"></div>
+      </div>
+
+      <!-- Station View Template (dynamically populated) -->
+      <div class="view-container" id="view-station">
+        <div class="view-header">
+          <h2 id="station-title">Station</h2>
+          <p id="station-description">Configure and track station progress</p>
+        </div>
+
+        <div class="station-dashboard-grid">
+          <div class="station-control-card">
+            <div class="station-image-wrapper">
+              <img id="station-img" src="" alt="Station" />
+            </div>
+            <div class="level-control">
+              <div class="level-display-large">
+                <span class="level-label">Current Level</span>
+                <div class="level-numbers">
+                  <span id="station-current-level" class="current-level">0</span>
+                  <span class="level-separator">/</span>
+                  <span id="station-max-level" class="max-level">0</span>
+                </div>
+              </div>
+              <input type="range" id="station-slider" min="0" max="27" value="0" class="station-slider-main" />
+            </div>
+            <div class="next-upgrade-section">
+              <h4 class="next-upgrade-title">Next Upgrade Requirements</h4>
+              <div id="station-req-next" class="req-list-modern"></div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <h3>Ore Distribution</h3>
+            <div id="progress-bars-station" class="progress-bars-container"></div>
+            <div id="excluded-station-ores" class="excluded-items"></div>
+          </div>
+        </div>
+
+        <div class="station-requirements-card">
+          <div class="req-tabs-modern">
+            <button class="tab-btn-modern active" data-tab="all">All Levels</button>
+            <button class="tab-btn-modern" data-tab="max">Max Out</button>
+          </div>
+          
+          <div class="req-content-modern">
+            <div class="req-section-modern active" data-tab-content="all">
+              <div id="station-req-all" class="all-levels-list-modern"></div>
+            </div>
+            <div class="req-section-modern" data-tab-content="max">
+              <div id="station-req-max" class="req-list-modern"></div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="station-card" data-station="dataAndAnalysis">
-        <h2>Data &amp; Analysis</h2>
-        <img src="../src/Data_analysis.png" alt="Data &amp; Analysis" />
-        <p>Level: <span class="station-level">0</span></p>
-        <input type="range" min="0" max="17" value="0" class="station-slider" />
-        <button class="toggle-requirements">Toggle Requirements</button>
-        <div class="requirements-container hidden">
-          <div class="req-section">
-            <h3>Next Upgrade</h3>
-            <div class="req-list" data-type="next"></div>
+      <!-- Inventory Manager View -->
+      <div class="view-container" id="view-inventory-manager">
+        <div class="view-header">
+          <h2>Inventory Manager</h2>
+          <p>Track and value your ore collection with Ambrosia Values</p>
+        </div>
+
+        <div class="inventory-stats-grid">
+          <div class="metric-card">
+            <h3>Total Ores</h3>
+            <div class="metric-value" id="stat-total-ores">0</div>
+            <div class="metric-label">Ores Collected</div>
           </div>
-          <div class="req-section">
-            <h3>Max Out</h3>
-            <div class="req-list" data-type="max"></div>
+          
+          <div class="metric-card">
+            <h3>Total AV</h3>
+            <div class="metric-value" id="stat-total-av">0</div>
+            <div class="metric-label">Ambrosia Value</div>
+          </div>
+          
+          <div class="metric-card">
+            <h3>Highest Value</h3>
+            <div class="metric-value" id="stat-highest-ore">-</div>
+            <div class="metric-label">Most Valuable Ore</div>
+          </div>
+          
+          <div class="metric-card">
+            <h3>Lowest Value</h3>
+            <div class="metric-value" id="stat-lowest-ore">-</div>
+            <div class="metric-label">Least Valuable Ore</div>
+          </div>
+        </div>
+
+        <div id="inventory-manager-content" class="inventory-manager-grid"></div>
+      </div>
+
+      <!-- Settings View -->
+      <div class="view-container" id="view-settings">
+        <div class="view-header">
+          <h2>Settings & Preferences</h2>
+          <p>Manage your data and application settings</p>
+        </div>
+
+        <div class="settings-grid">
+          <div class="settings-card">
+            <h3>Data Management</h3>
+            <div class="settings-section">
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h4>Auto-Save to Local Storage</h4>
+                  <p>Automatically save your progress data locally in your browser</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="auto-save-toggle">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h4>Export Data</h4>
+                  <p>Download your current progress as a JSON file</p>
+                </div>
+                <button class="export-btn" id="export-data-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  Export Data
+                </button>
+              </div>
+
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h4>Import Data</h4>
+                  <p>Load progress from a previously exported JSON file</p>
+                </div>
+                <button class="import-btn" id="import-data-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                  </svg>
+                  Import Data
+                </button>
+                <input type="file" id="import-file-input" accept=".json" style="display: none;">
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h3>About</h3>
+            <div class="settings-section">
+              <p class="about-text">Azure Mines Progress Tracker</p>
+              <p class="about-text">Version 1.0.0</p>
+              <p class="about-text">Created by LytexWZ</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="station-card" data-station="marketplace">
-        <h2>Marketplace</h2>
-        <img src="../src/Marketplace.png" alt="Marketplace" />
-        <p>Level: <span class="station-level">0</span></p>
-        <input type="range" min="0" max="14" value="0" class="station-slider" />
-        <button class="toggle-requirements">Toggle Requirements</button>
-        <div class="requirements-container hidden">
-          <div class="req-section">
-            <h3>Next Upgrade</h3>
-            <div class="req-list" data-type="next"></div>
-          </div>
-          <div class="req-section">
-            <h3>Max Out</h3>
-            <div class="req-list" data-type="max"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="station-card" data-station="researchAndDevelopment">
-        <h2>Research &amp; Development</h2>
-        <img src="../src/Research_Development.png" alt="Research &amp; Development" />
-        <p>Level: <span class="station-level">0</span></p>
-        <input type="range" min="0" max="15" value="0" class="station-slider" />
-        <button class="toggle-requirements">Toggle Requirements</button>
-        <div class="requirements-container hidden">
-          <div class="req-section">
-            <h3>Next Upgrade</h3>
-            <div class="req-list" data-type="next"></div>
-          </div>
-          <div class="req-section">
-            <h3>Max Out</h3>
-            <div class="req-list" data-type="max"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="station-card" data-station="storageManagement">
-        <h2>Storage Management</h2>
-        <img src="../src/Storage_management.png" alt="Storage Management" />
-        <p>Level: <span class="station-level">0</span></p>
-        <input type="range" min="0" max="16" value="0" class="station-slider" />
-        <button class="toggle-requirements">Toggle Requirements</button>
-        <div class="requirements-container hidden">
-          <div class="req-section">
-            <h3>Next Upgrade</h3>
-            <div class="req-list" data-type="next"></div>
-          </div>
-          <div class="req-section">
-            <h3>Max Out</h3>
-            <div class="req-list" data-type="max"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="station-card" data-station="teleporterArray">
-        <h2>Teleporter Array</h2>
-        <img src="../src/Teleporter_array.png" alt="Teleporter Array" />
-        <p>Level: <span class="station-level">0</span></p>
-        <input type="range" min="0" max="1" value="0" class="station-slider" />
-        <button class="toggle-requirements">Toggle Requirements</button>
-        <div class="requirements-container hidden">
-          <div class="req-section">
-            <h3>Next Upgrade</h3>
-            <div class="req-list" data-type="next"></div>
-          </div>
-          <div class="req-section">
-            <h3>Max Out</h3>
-            <div class="req-list" data-type="max"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="station-card" data-station="personalTunnel">
-        <h2>Personal Tunnel</h2>
-        <img src="../src/Personal_tunnel.png" alt="Personal Tunnel" />
-        <p>Level: <span class="station-level">0</span></p>
-        <input type="range" min="0" max="1" value="0" class="station-slider" />
-        <button class="toggle-requirements">Toggle Requirements</button>
-        <div class="requirements-container hidden">
-          <div class="req-section">
-            <h3>Next Upgrade</h3>
-            <div class="req-list" data-type="next"></div>
-          </div>
-          <div class="req-section">
-            <h3>Max Out</h3>
-            <div class="req-list" data-type="max"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="grand-requirements-section">
-      <h2>Complete Game Requirements</h2>
-      <div id="complete-game-requirements" class="requirements-container"></div>
-    </section>
-  </main>
+    </main>
+  </div>
 
   <script src="calc.js"></script>
-  
-  <footer id="credits">
-    <p>Website coded and designed by <strong>LytexWZ</strong></p>
-    <div class="credit-links">
-      <a href="https://github.com/LytexWZ" target="_blank">
-        <img src="../src/github-icon.png" alt="GitHub" class="credit-icon"> LytexWZ
-      </a>
-      <span>
-        <img src="../src/discord-icon.png" alt="Discord" class="credit-icon"> Lytexjb
-      </span>
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      sidebar.classList.toggle('active');
+    }
+    
+    // Handle top navigation clicks
+    function handleTopNavClick(view, clickedElement) {
+      // Remove active class from all top nav buttons
+      document.querySelectorAll('.top-nav-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      
+      // Add active class to clicked button
+      if (clickedElement) {
+        clickedElement.classList.add('active');
+      }
+      
+      // Switch to appropriate view
+      if (view === 'overview') {
+        // Hide all view containers
+        document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active'));
+        
+        // Show overview
+        document.getElementById('view-overview').classList.add('active');
+        
+        // Restore sidebar to progress panel if coming from inventory manager
+        const sidebarTitle = document.getElementById('sidebar-title');
+        if (sidebarTitle.textContent === 'Inventory Manager') {
+          restoreProgressSidebar();
+        }
+      } else if (view === 'inventory-manager') {
+        window.switchToInventoryManager && window.switchToInventoryManager();
+        
+        // Update active state
+        if (clickedElement) {
+          clickedElement.classList.add('active');
+        }
+      }
+    }
+    
+    document.addEventListener('click', function(event) {
+      const sidebar = document.querySelector('.sidebar');
+      const toggle = document.querySelector('.mobile-menu-toggle');
+      
+      if (window.innerWidth <= 968 && sidebar.classList.contains('active')) {
+        if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
+          sidebar.classList.remove('active');
+        }
+      }
+    });
+
+    // ==================== LOCALSTORAGE & DATA MANAGEMENT ====================
+    
+    const STORAGE_KEY = 'azureMinesProgressData';
+    const AUTO_SAVE_KEY = 'azureMinesAutoSave';
+    
+    // Update status badge
+    function updateStatusBadge() {
+      const autoSaveEnabled = localStorage.getItem(AUTO_SAVE_KEY) === 'true';
+      const badge = document.getElementById('save-status-badge');
+      const text = document.getElementById('save-status-text');
+      
+      if (autoSaveEnabled) {
+        badge.classList.add('saving-enabled');
+        text.textContent = 'Data saved locally';
+      } else {
+        badge.classList.remove('saving-enabled');
+        text.textContent = 'Data not saved';
+      }
+    }
+    
+    // Load auto-save preference
+    function loadAutoSavePreference() {
+      // Set auto-save to true by default if not set
+      let autoSaveEnabled = localStorage.getItem(AUTO_SAVE_KEY);
+      if (autoSaveEnabled === null) {
+        localStorage.setItem(AUTO_SAVE_KEY, 'true');
+        autoSaveEnabled = 'true';
+      }
+      const toggle = document.getElementById('auto-save-toggle');
+      if (toggle) {
+        toggle.checked = autoSaveEnabled === 'true';
+      }
+      updateStatusBadge();
+    }
+    
+    // Save data to localStorage
+    function saveToLocalStorage() {
+      if (localStorage.getItem(AUTO_SAVE_KEY) === 'true') {
+        try {
+          // Collect inventory data
+          const inventoryData = {};
+          if (window.ores && Array.isArray(window.ores)) {
+            window.ores.forEach(ore => {
+              if (ore.owned > 0) {
+                inventoryData[ore.id] = ore.owned;
+              }
+            });
+          }
+          
+          // Get station levels from the global scope (defined in calc.js)
+          const data = {
+            stationLevels: window.stationLevels || {},
+            inventory: inventoryData,
+            timestamp: new Date().toISOString(),
+            version: '1.0.0'
+          };
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        } catch (e) {
+          console.error('Failed to save to localStorage:', e);
+        }
+      }
+    }
+    
+    // Expose to window for global access
+    window.saveToLocalStorage = saveToLocalStorage;
+    
+    // Load data from localStorage
+    function loadFromLocalStorage() {
+      if (localStorage.getItem(AUTO_SAVE_KEY) === 'true') {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) {
+            const data = JSON.parse(saved);
+            
+            // Load station levels
+            if (data.stationLevels && window.stationLevels) {
+              Object.assign(window.stationLevels, data.stationLevels);
+            }
+            
+            // Load inventory
+            if (data.inventory && window.ores && Array.isArray(window.ores)) {
+              window.ores.forEach(ore => {
+                if (data.inventory[ore.id] !== undefined) {
+                  ore.owned = data.inventory[ore.id];
+                }
+              });
+            }
+            
+            // Trigger UI updates if available
+            if (typeof window.switchView === 'function') {
+              window.switchView('overview');
+            }
+            
+            // Sync to Inventory Manager after loading
+            if (typeof window.syncFromProgressTracker === 'function') {
+              window.syncFromProgressTracker();
+            }
+          }
+        } catch (e) {
+          console.error('Failed to load from localStorage:', e);
+        }
+      }
+    }
+    
+    // Export data as JSON file
+    function exportData() {
+      try {
+        // Collect inventory data
+        const inventoryData = {};
+        if (window.ores && Array.isArray(window.ores)) {
+          window.ores.forEach(ore => {
+            inventoryData[ore.id] = ore.owned;
+          });
+        }
+        
+        const data = {
+          stationLevels: window.stationLevels || {},
+          inventory: inventoryData,
+          timestamp: new Date().toISOString(),
+          version: '1.0.0'
+        };
+        
+        const dataStr = JSON.stringify(data, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `azure-mines-progress-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        
+        showCustomAlert('Data exported successfully!', 'success');
+      } catch (e) {
+        console.error('Export failed:', e);
+        showCustomAlert('Failed to export data: ' + e.message, 'error');
+      }
+    }
+    
+    // Import data from JSON file
+    function importData(file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          
+          // Load station levels
+          if (data.stationLevels) {
+            if (window.stationLevels) {
+              Object.assign(window.stationLevels, data.stationLevels);
+            } else {
+              window.stationLevels = data.stationLevels;
+            }
+          }
+          
+          // Load inventory
+          if (data.inventory && window.ores && Array.isArray(window.ores)) {
+            window.ores.forEach(ore => {
+              if (data.inventory[ore.id] !== undefined) {
+                ore.owned = data.inventory[ore.id];
+              } else {
+                ore.owned = 0; // Reset if not in import data
+              }
+            });
+          }
+          
+          // Save to localStorage if auto-save is enabled
+          saveToLocalStorage();
+          
+          // Trigger UI updates
+          if (typeof window.switchView === 'function') {
+            window.switchView('overview');
+          }
+          
+          showCustomAlert('Data imported successfully!', 'success');
+        } catch (err) {
+          console.error('Import failed:', err);
+          showCustomAlert('Failed to import data: ' + err.message, 'error');
+        }
+      };
+      reader.readAsText(file);
+    }
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      loadAutoSavePreference();
+      loadFromLocalStorage();
+    });
+    
+    // Auto-save toggle
+    const autoSaveToggle = document.getElementById('auto-save-toggle');
+    if (autoSaveToggle) {
+      autoSaveToggle.addEventListener('change', function() {
+        localStorage.setItem(AUTO_SAVE_KEY, this.checked);
+        updateStatusBadge();
+        
+        if (this.checked) {
+          saveToLocalStorage();
+          showCustomAlert('Auto-save enabled! Your progress will be saved automatically.', 'success');
+        } else {
+          showCustomAlert('Auto-save disabled. Your data will not be saved automatically.', 'info');
+        }
+      });
+    }
+    
+    // Export button
+    const exportBtn = document.getElementById('export-data-btn');
+    if (exportBtn) {
+      exportBtn.addEventListener('click', exportData);
+    }
+    
+    // Import button
+    const importBtn = document.getElementById('import-data-btn');
+    const importFileInput = document.getElementById('import-file-input');
+    
+    if (importBtn && importFileInput) {
+      importBtn.addEventListener('click', function() {
+        importFileInput.click();
+      });
+      
+      importFileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          importData(file);
+        }
+        // Reset input so same file can be imported again if needed
+        e.target.value = '';
+      });
+    }
+    
+    // Override station slider to save on change
+    const originalSliderHandler = document.getElementById('station-slider');
+    if (originalSliderHandler) {
+      originalSliderHandler.addEventListener('change', function() {
+        saveToLocalStorage();
+      });
+    }
+    
+    // Initialize immediately
+    loadAutoSavePreference();
+
+    // ==================== INVENTORY MANAGER INTEGRATION ====================
+    
+    let inventoryManagerInitialized = false;
+    let invManagerSaved = {};
+
+    const invCategories = [
+      { id: "basic-minerals", name: "Basic Minerals", ores: ["Stone", "Coal", "Sulfur", "Opal", "Moonstone", "Dragonstone"] },
+      { id: "common-metals", name: "Common Metals", ores: ["Copper", "Iron", "Platinum", "Gold", "Silver"] },
+      { id: "common-jewels", name: "Common Jewels", ores: ["Diamond", "Amethyst", "Topaz", "Emerald", "Ruby", "Sapphire"] },
+      { id: "rare-oddities", name: "Rare Oddities", ores: ["Nihilium", "Garnet", "Twitchite", "Kappa", "Ambrosia"] },
+      { id: "halloween", name: "Halloween", ores: ["Nightmarium", "Sinistyte E", "Sinistyte S", "Sinistyte L", "Sinistyte M", "Pumpkinite"] },
+      { id: "holidays", name: "Holidays", ores: ["Frostarium", "Giftium", "Frawstbyte", "Gingerbreadium", "Peppermintium", "Noobite"] },
+      { id: "unstable-forms", name: "Unstable Forms", ores: ["Uranium", "Plutonium", "Promethium"] },
+      { id: "scary-caverns", name: "Scary Caverns (600m - 1000m)", ores: ["Boomite", "Shadow Metal", "Illuminunium", "Serendibite"] },
+      { id: "azure-caverns", name: "Azure Caverns (1000m - 2000m)", ores: ["Baryte", "Rainbonite", "Alexandrite", "Tungsten", "Azure", "Orichalcum", "Mithril"] },
+      { id: "underworld", name: "Underworld (2000m - 3000m)", ores: ["Painite", "Nullstone", "Dragonglass", "Firecrystal", "Symmetrium", "Soulstone"] },
+      { id: "radioactive-zone", name: "Radioactive Zone (3000m - 4000m)", ores: ["Corium", "Newtonium", "Solarium", "Yunium"] },
+      { id: "dreamscape", name: "Dreamscape (4000m - 5000m)", ores: ["Redmatter", "Antimatter", "Darkmatter", "Constellatium", "Stellarite", "Frightstone"] },
+      { id: "unknown", name: "???", ores: ["Valhalum", "Mightstone"] },
+      { id: "enigmatic-specimens", name: "Enigmatic Specimens", ores: ["Element V", "Havium"] },
+      { id: "rare-metals", name: "Rare Metals", ores: ["Titanium"] }
+    ];
+
+    const marketOres = ["Stone", "Opal", "Moonstone", "Coal", "Silver", "Iron", "Copper", "Sapphire", "Ruby", "Emerald", "Gold", "Diamond", "Topaz", "Amethyst", "Platinum", "Uranium", "Plutonium", "Serendibite", "Baryte", "Azure", "Rainbonite", "Dragonglass", "Painite", "Newtonium", "Promethium", "Antimatter", "Darkmatter", "Havium"];
+
+    function getPercentClass(percent) {
+      if (percent >= 100) return 'percent-over100';
+      if (percent >= 90) return 'percent-90';
+      if (percent >= 80) return 'percent-80';
+      if (percent >= 70) return 'percent-70';
+      if (percent >= 60) return 'percent-60';
+      if (percent >= 50) return 'percent-50';
+      if (percent >= 40) return 'percent-40';
+      if (percent >= 30) return 'percent-30';
+      if (percent >= 20) return 'percent-20';
+      if (percent >= 10) return 'percent-10';
+      return 'percent-0';
+    }
+
+    function getCategoryIcon(categoryId) {
+      const icons = {
+        "basic-minerals": `<path d="M11.264 2.205A4 4 0 0 0 6.42 4.211l-4 8a4 4 0 0 0 1.359 5.117l6 4a4 4 0 0 0 4.438 0l6-4a4 4 0 0 0 1.576-4.592l-2-6a4 4 0 0 0-2.53-2.53z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.99 22 14 12l7.822 3.184" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 12 8.47 2.302" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+        "common-metals": `<path d="M7 10H6a4 4 0 0 1-4-4 1 1 0 0 1 1-1h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 5a1 1 0 0 1 1-1h13a1 1 0 0 1 1 1 7 7 0 0 1-7 7H8a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12v5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 12v5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 20a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3 1 1 0 0 1-1 1H6a1 1 0 0 1-1-1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+        "common-jewels": `<path d="M10.5 3 8 9l4 13 4-13-2.5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 3a2 2 0 0 1 1.6.8l3 4a2 2 0 0 1 .013 2.382l-7.99 10.986a2 2 0 0 1-3.247 0l-7.99-10.986A2 2 0 0 1 2.4 7.8l2.998-3.997A2 2 0 0 1 7 3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 9h20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+        "rare-oddities": `<path d="M13.744 17.736a6 6 0 1 1-7.48-7.48" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 6h1v4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="m6.134 14.768.866-.5 2 3.464" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="8" r="6" stroke="currentColor" stroke-width="2"/>`,
+        "halloween": `<path d="M9 10h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 10h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+        "holidays": `<path d="M5.7 21a2 2 0 0 1-3.5-2l8.6-14a6 6 0 0 1 10.4 6 2 2 0 1 1-3.464-2 2 2 0 1 0-3.464-2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17.75 7 15 2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.9 4.8 13 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="m7.9 9.7 2 4.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.9 14.7 7 18.9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+        "unstable-forms": `<circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="2" fill="currentColor"/><path d="M12 2v4M12 18v4M20.66 7l-3.46 2M6.8 15l-3.46 2M20.66 17l-3.46-2M6.8 9l-3.46-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>`,
+        "scary-caverns": `<path d="M2.5 16.88a1 1 0 0 1-.32-1.43l9-13.02a1 1 0 0 1 1.64 0l9 13.01a1 1 0 0 1-.32 1.44l-8.51 4.86a2 2 0 0 1-1.98 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 2v20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+        "azure-caverns": `<path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 16v-4M9 13l3-3 3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+        "underworld": `<path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+        "radioactive-zone": `<path d="M12 12h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 15.4641a4 4 0 0 1-4 0L7.52786 19.74597 A 1 1 0 0 0 7.99303 21.16211 10 10 0 0 0 16.00697 21.16211 1 1 0 0 0 16.47214 19.74597z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 12a4 4 0 0 0-2-3.464l2.472-4.282a1 1 0 0 1 1.46-.305 10 10 0 0 1 4.006 6.94A1 1 0 0 1 21 12z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 12a4 4 0 0 1 2-3.464L7.528 4.254a1 1 0 0 0-1.46-.305 10 10 0 0 0-4.006 6.94A1 1 0 0 0 3 12z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+        "dreamscape": `<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 8l-2 2M12 3l1 2M21 12l-2 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>`,
+        "unknown": `<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+        "enigmatic-specimens": `<path d="M14 18a2 2 0 0 0-4 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="m19 11-2.11-6.657a2 2 0 0 0-2.752-1.148l-1.276.61A2 2 0 0 1 12 4H8.5a2 2 0 0 0-1.925 1.456L5 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11h20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="17" cy="18" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="18" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+        "rare-metals": `<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="7.5 4.21 12 6.81 16.5 4.21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="7.5 19.79 7.5 14.6 3 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="21 12 16.5 14.6 16.5 19.79" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="3.27 6.96 12 12.01 20.73 6.96" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" x2="12" y1="22.08" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
+      };
+      return icons[categoryId] || `<rect x="3" y="3" width="18" height="18" stroke="currentColor" stroke-width="2" rx="2"/><path d="M9 3V21M15 3V21M3 9H21M3 15H21" stroke="currentColor" stroke-width="2"/>`;
+    }
+
+    function loadInventoryManagerData() {
+      try {
+        invManagerSaved = JSON.parse(localStorage.getItem("oreQuantities") || "{}");
+      } catch {
+        invManagerSaved = {};
+      }
+    }
+
+    function updateInventoryManagerSidebar(activeCategory = null, activeView = 'all') {
+      const navMenu = document.getElementById('nav-menu');
+      navMenu.innerHTML = `
+        <div class="nav-section-label">BACK</div>
+        <button class="nav-item" data-view="overview">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="nav-label">Back to Dashboard</span>
+        </button>
+        
+        <button class="nav-item ${activeView === 'all' ? 'active' : ''}" data-inv-view="all">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" rx="1"/>
+          </svg>
+          <span class="nav-label">All Categories</span>
+        </button>
+        
+        <div class="nav-section-label">CATEGORIES</div>
+        ${invCategories.map(cat => `
+          <button class="nav-item ${activeCategory === cat.id ? 'active' : ''}" data-inv-category="${cat.id}">
+            <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+              ${getCategoryIcon(cat.id)}
+            </svg>
+            <span class="nav-label">${cat.name}</span>
+          </button>
+        `).join('')}
+        
+        <div class="nav-section-label">SYSTEM</div>
+        <button class="nav-item ${activeView === 'settings' ? 'active' : ''}" data-inv-view="settings">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span class="nav-label">Settings</span>
+        </button>
+      `;
+
+      // Re-attach event listeners for category selection
+      navMenu.querySelectorAll('.nav-item[data-inv-category]').forEach(item => {
+        item.addEventListener('click', () => {
+          const categoryId = item.getAttribute('data-inv-category');
+          renderCategoryDetail(categoryId);
+          updateInventoryManagerSidebar(categoryId, 'category');
+        });
+      });
+      
+      // Handle "All Categories" view
+      navMenu.querySelector('[data-inv-view="all"]')?.addEventListener('click', () => {
+        renderInventoryManager();
+        updateInventoryManagerSidebar(null, 'all');
+      });
+      
+      // Handle "Settings" view
+      navMenu.querySelector('[data-inv-view="settings"]')?.addEventListener('click', () => {
+        renderInventorySettings();
+        updateInventoryManagerSidebar(null, 'settings');
+      });
+
+      navMenu.querySelector('[data-view="overview"]')?.addEventListener('click', () => {
+        // Hide all view containers
+        document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active'));
+        
+        // Show overview
+        document.getElementById('view-overview').classList.add('active');
+        
+        // Update topbar active state
+        document.querySelectorAll('.top-nav-link').forEach(l => l.classList.remove('active'));
+        const dashboardBtn = document.querySelector('.top-nav-link[onclick*="overview"]');
+        if (dashboardBtn) {
+          dashboardBtn.classList.add('active');
+        }
+        
+        // Restore sidebar
+        restoreProgressSidebar();
+        
+        // Call switchView if available
+        window.switchView && window.switchView('overview');
+      });
+    }
+
+    function scrollToCategory(categoryId) {
+      const element = document.getElementById(`inv-cat-${categoryId}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+    
+    // Render detailed view of a single category
+    function renderCategoryDetail(categoryId) {
+      if (typeof oreValues === 'undefined' || typeof oreValues !== 'object') {
+        console.error('oreValues not loaded');
+        return;
+      }
+
+      loadInventoryManagerData();
+      syncFromProgressTracker(); // Sync latest data from progress tracker
+      
+      // Hide global stats when viewing specific category
+      const globalStats = document.querySelector('.view-container#view-inventory-manager > .inventory-stats-grid');
+      if (globalStats) {
+        globalStats.style.display = 'none';
+      }
+      
+      const category = invCategories.find(cat => cat.id === categoryId);
+      if (!category) return;
+      
+      const content = document.getElementById('inventory-manager-content');
+      
+      // Calculate category statistics
+      let totalOres = 0;
+      let totalAV = 0;
+      let totalAVNeeded = 0;
+      let oresCollected = 0;
+      let categoryHighest = null;
+      let categoryLowest = null;
+      
+      category.ores.forEach(oreName => {
+        const oreData = oreValues[oreName];
+        if (oreData) {
+          const qty = invManagerSaved[oreName] || 0;
+          totalOres += qty;
+          totalAVNeeded += oreData.AV;
+          const avs = qty / oreData.AV;
+          totalAV += avs;
+          if (qty > 0) {
+            oresCollected++;
+            // Track highest and lowest within category
+            if (!categoryHighest || avs > categoryHighest.avs) categoryHighest = { ore: oreName, avs };
+            if (!categoryLowest || avs < categoryLowest.avs) categoryLowest = { ore: oreName, avs };
+          }
+        }
+      });
+      
+      const completionPercent = ((totalAV / category.ores.length) * 100).toFixed(1);
+      
+      // Calculate global statistics (all ores)
+      let globalTotalOres = 0;
+      let globalTotalAV = 0;
+      let globalHighest = null;
+      let globalLowest = null;
+
+      Object.keys(oreValues).forEach(oreName => {
+        const oreData = oreValues[oreName];
+        const qty = Number(invManagerSaved[oreName]) || 0;
+        globalTotalOres += qty;
+        const avs = qty / oreData.AV;
+        globalTotalAV += avs;
+
+        if (qty > 0) {
+          if (!globalHighest || avs > globalHighest.avs) globalHighest = { ore: oreName, avs };
+          if (!globalLowest || avs < globalLowest.avs) globalLowest = { ore: oreName, avs };
+        }
+      });
+      
+      content.innerHTML = `
+        <div class="inv-detail-view">
+          <div class="inv-detail-header">
+            <button class="inv-back-btn" onclick="renderInventoryManager(); updateInventoryManagerSidebar(null, 'all');">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Back to All
+            </button>
+            <h2 class="inv-detail-title">
+              <svg class="category-title-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                ${getCategoryIcon(category.id)}
+              </svg>
+              ${category.name}
+            </h2>
+          </div>
+          
+          <div class="inv-category-container" style="max-width: 900px; margin: 0 auto;">
+            <h3 class="inv-category-title ${categoryId}-banner">
+              <svg class="category-title-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                ${getCategoryIcon(category.id)}
+              </svg>
+              ${category.name}
+            </h3>
+            <table class="inv-table">
+            <thead>
+              <tr>
+                <th>Ore Name</th>
+                <th class="av-percent">AV%</th>
+                <th>[ # ]</th>
+                <th>AVs</th>
+                <th>1 AV</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${category.ores.map(oreName => {
+                const oreData = oreValues[oreName];
+                if (!oreData) return '';
+                
+                const qty = invManagerSaved[oreName] || 0;
+                const avs = qty / oreData.AV;
+                const percent = avs * 100;
+                const percentClass = getPercentClass(percent);
+                const isMarket = marketOres.includes(oreName);
+                const oreClass = 'ore-' + oreName.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+                return `
+                  <tr>
+                    <td class="ore-name ${oreClass}">
+                      <img class="ore-icon" src="${oreData.icon}" alt="${oreName}">
+                      <span>${oreName}</span>
+                      ${isMarket ? '<svg class="market-icon" onclick="showCustomAlert(\'This ore can be exchanged in the game market\', \'info\')" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"/><path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"/><path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"/></svg>' : ''}
+                    </td>
+                    <td class="av-percent ${percentClass}" data-ore="${oreName}">${percent.toFixed(1)}%</td>
+                    <td><input type="number" min="0" value="${qty}" class="inv-ore-input" data-ore="${oreName}"></td>
+                    <td class="inv-avs" data-ore="${oreName}">${avs.toFixed(2)}</td>
+                    <td>${oreData.AV}</td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+          </div>
+          
+          <div class="inv-stats-section">
+            <h3 class="inv-stats-section-title">Category Statistics</h3>
+            <div class="inv-category-stats-horizontal">
+              <div class="metric-card">
+                <h3>Total Ores</h3>
+                <div class="metric-value">${totalOres.toLocaleString()}</div>
+                <div class="metric-label">${oresCollected} / ${category.ores.length} Collected</div>
+              </div>
+              
+              <div class="metric-card">
+                <h3>Total AV</h3>
+                <div class="metric-value">${totalAV.toFixed(2)}</div>
+                <div class="metric-label">Category Ambrosia Value</div>
+              </div>
+              
+              <div class="metric-card">
+                <h3>Highest Value</h3>
+                <div class="metric-value" style="font-size: 1.25rem;">${categoryHighest ? categoryHighest.ore : '-'}</div>
+                <div class="metric-label">${categoryHighest ? categoryHighest.avs.toFixed(2) + ' AVs' : 'No data'}</div>
+              </div>
+              
+              <div class="metric-card">
+                <h3>Lowest Value</h3>
+                <div class="metric-value" style="font-size: 1.25rem;">${categoryLowest ? categoryLowest.ore : '-'}</div>
+                <div class="metric-label">${categoryLowest ? categoryLowest.avs.toFixed(2) + ' AVs' : 'No data'}</div>
+              </div>
+            </div>
+            
+            <h3 class="inv-stats-section-title">Overall Totals</h3>
+            <div class="inv-category-stats-horizontal">
+              <div class="metric-card">
+                <h3>Total Ores</h3>
+                <div class="metric-value">${globalTotalOres.toLocaleString()}</div>
+                <div class="metric-label">All Ores Collected</div>
+              </div>
+              
+              <div class="metric-card">
+                <h3>Total AV</h3>
+                <div class="metric-value">${globalTotalAV.toFixed(2)}</div>
+                <div class="metric-label">Global Ambrosia Value</div>
+              </div>
+              
+              <div class="metric-card">
+                <h3>Highest Value</h3>
+                <div class="metric-value" style="font-size: 1.25rem;">${globalHighest ? globalHighest.ore : '-'}</div>
+                <div class="metric-label">${globalHighest ? globalHighest.avs.toFixed(2) + ' AVs' : 'No data'}</div>
+              </div>
+              
+              <div class="metric-card">
+                <h3>Lowest Value</h3>
+                <div class="metric-value" style="font-size: 1.25rem;">${globalLowest ? globalLowest.ore : '-'}</div>
+                <div class="metric-label">${globalLowest ? globalLowest.avs.toFixed(2) + ' AVs' : 'No data'}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Attach input listeners
+      attachInventoryInputListeners();
+    }
+    
+    // Render inventory settings view
+    function renderInventorySettings() {
+      // Hide global stats when viewing settings
+      const globalStats = document.querySelector('.view-container#view-inventory-manager > .inventory-stats-grid');
+      if (globalStats) {
+        globalStats.style.display = 'none';
+      }
+      
+      const content = document.getElementById('inventory-manager-content');
+      content.innerHTML = `
+        <div class="settings-card" style="max-width: 800px; margin: 0 auto;">
+          <h3>Data Management</h3>
+          <div class="settings-section">
+            <div class="setting-item">
+              <div class="setting-info">
+                <h4>Export All Data</h4>
+                <p>Download complete progress and inventory data as a JSON file</p>
+              </div>
+              <button class="export-btn" onclick="exportAllData()" style="background: rgba(46, 204, 113, 0.1); border-color: rgba(46, 204, 113, 0.3); color: #2ecc71;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Export All Data
+              </button>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <h4>Export Inventory Data</h4>
+                <p>Download your ore collection data as a JSON file</p>
+              </div>
+              <button class="export-btn" onclick="exportInventoryData()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Export Inventory
+              </button>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <h4>Import Inventory Data</h4>
+                <p>Load ore collection from a previously exported JSON file</p>
+              </div>
+              <button class="import-btn" onclick="document.getElementById('import-inventory-input').click()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                Import Inventory
+              </button>
+              <input type="file" id="import-inventory-input" accept=".json" style="display: none;" onchange="importInventoryData(event)">
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <h4>Clear All Inventory Data</h4>
+                <p>Reset all ore quantities to zero</p>
+              </div>
+              <button class="danger-btn" onclick="clearInventoryData()" style="background: rgba(231, 76, 60, 0.1); border-color: rgba(231, 76, 60, 0.3); color: #e74c3c;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+                Clear Inventory
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="settings-card" style="max-width: 800px; margin: 2rem auto 0;">
+          <h3>About Inventory Manager</h3>
+          <div class="settings-section">
+            <p class="about-text">Track your ore collection with Ambrosia Values (AV)</p>
+            <p class="about-text">Total Ores: ${Object.keys(oreValues).length}</p>
+            <p class="about-text">Categories: ${invCategories.length}</p>
+          </div>
+        </div>
+      `;
+    }
+    
+    // Helper function to attach input listeners (reusable)
+    // Sync Inventory Manager with Progress Tracker
+    function syncToProgressTracker() {
+      if (!window.ores || !invManagerSaved) return;
+      
+      window.ores.forEach(ore => {
+        const oreName = ore.name; // Progress tracker ore names match Inventory Manager names
+        if (invManagerSaved.hasOwnProperty(oreName)) {
+          ore.owned = Number(invManagerSaved[oreName]) || 0;
+        }
+      });
+      
+      // Trigger progress tracker to update its views
+      if (typeof window.saveToLocalStorage === 'function') {
+        window.saveToLocalStorage();
+      }
+    }
+
+    // Expose sync function globally
+    window.syncToProgressTracker = syncToProgressTracker;
+
+    // Sync Progress Tracker to Inventory Manager
+    function syncFromProgressTracker() {
+      if (!window.ores) return;
+      
+      window.ores.forEach(ore => {
+        const oreName = ore.name;
+        const qty = Number(ore.owned) || 0;
+        if (invManagerSaved[oreName] !== qty) {
+          invManagerSaved[oreName] = qty;
+        }
+      });
+      
+      localStorage.setItem("oreQuantities", JSON.stringify(invManagerSaved));
+      updateInventoryManagerStats();
+      updateInventoryManagerInputs();
+    }
+
+    // Update visible input fields in Inventory Manager
+    function updateInventoryManagerInputs() {
+      document.querySelectorAll('.inv-ore-input').forEach(input => {
+        const oreName = input.dataset.ore;
+        if (invManagerSaved.hasOwnProperty(oreName)) {
+          const qty = Number(invManagerSaved[oreName]) || 0;
+          if (input.value !== qty.toString()) {
+            input.value = qty;
+            
+            // Update the displayed AV% and AVs in the same row
+            const oreData = oreValues[oreName];
+            if (oreData) {
+              const avs = qty / oreData.AV;
+              const percent = avs * 100;
+              const percentClass = getPercentClass(percent);
+              
+              const row = input.closest('tr');
+              const avPercentCell = row.querySelector('.av-percent');
+              if (avPercentCell) {
+                avPercentCell.textContent = percent.toFixed(1) + '%';
+                avPercentCell.className = `av-percent ${percentClass}`;
+              }
+              const avsCell = row.querySelector('.inv-avs');
+              if (avsCell) {
+                avsCell.textContent = avs.toFixed(2);
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Expose sync function globally
+    window.syncFromProgressTracker = syncFromProgressTracker;
+
+    // Load initial sync when page loads
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        loadInventoryManagerData();
+        syncToProgressTracker();
+      }, 100);
+    });
+
+    function attachInventoryInputListeners() {
+      document.querySelectorAll('.inv-ore-input').forEach(input => {
+        input.addEventListener('input', function() {
+          const oreName = this.dataset.ore;
+          const qty = parseFloat(this.value) || 0;
+          invManagerSaved[oreName] = qty;
+          localStorage.setItem("oreQuantities", JSON.stringify(invManagerSaved));
+          
+          const oreData = oreValues[oreName];
+          if (oreData) {
+            const avs = qty / oreData.AV;
+            const percent = avs * 100;
+            const percentClass = getPercentClass(percent);
+            
+            const row = this.closest('tr');
+            const avPercentCell = row.querySelector('.av-percent');
+            if (avPercentCell) {
+              avPercentCell.textContent = percent.toFixed(1) + '%';
+              avPercentCell.className = `av-percent ${percentClass}`;
+            }
+            const avsCell = row.querySelector('.inv-avs');
+            if (avsCell) {
+              avsCell.textContent = avs.toFixed(2);
+            }
+          }
+          
+          updateInventoryManagerStats();
+          syncToProgressTracker(); // Sync to progress tracker when Inventory Manager changes
+        });
+      });
+    }
+
+    function restoreProgressSidebar() {
+      const navMenu = document.getElementById('nav-menu');
+      const sidebarTitle = document.getElementById('sidebar-title');
+      
+      if (sidebarTitle) {
+        sidebarTitle.textContent = 'Progress Panel';
+      }
+      
+      if (!navMenu) return;
+      navMenu.innerHTML = `
+        <div class="nav-section-label">MAIN</div>
+        <button class="nav-item active" data-view="overview">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" rx="1"/>
+          </svg>
+          <span class="nav-label">Dashboard</span>
+        </button>
+        <button class="nav-item" data-view="analytics">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M7 16L12 11L16 15L21 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="nav-label">Analytics</span>
+        </button>
+        
+        <div class="nav-section-label">MANAGEMENT</div>
+        <button class="nav-item" data-view="inventory">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" stroke="currentColor" stroke-width="2" rx="2"/>
+            <path d="M9 3V21M15 3V21M3 9H21M3 15H21" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span class="nav-label">Inventory</span>
+        </button>
+        <button class="nav-item" data-view="stations">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-label">Stations</span>
+          <span class="nav-badge">8</span>
+        </button>
+        
+        <div class="nav-section-label">STATIONS</div>
+        <button class="nav-item" data-view="station" data-station="miningOperation">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m14 13-8.381 8.38a1 1 0 0 1-3.001-3L11 9.999"/>
+            <path d="M15.973 4.027A13 13 0 0 0 5.902 2.373c-1.398.342-1.092 2.158.277 2.601a19.9 19.9 0 0 1 5.822 3.024"/>
+            <path d="M16.001 11.999a19.9 19.9 0 0 1 3.024 5.824c.444 1.369 2.26 1.676 2.603.278A13 13 0 0 0 20 8.069"/>
+            <path d="M18.352 3.352a1.205 1.205 0 0 0-1.704 0l-5.296 5.296a1.205 1.205 0 0 0 0 1.704l2.296 2.296a1.205 1.205 0 0 0 1.704 0l5.296-5.296a1.205 1.205 0 0 0 0-1.704z"/>
+          </svg>
+          <span class="nav-label">Mining Operation</span>
+        </button>
+        <button class="nav-item" data-view="station" data-station="dataAndAnalysis">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M7 16L12 11L16 15L21 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="nav-label">Data & Analysis</span>
+        </button>
+        <button class="nav-item" data-view="station" data-station="marketplace">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"/>
+            <path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"/>
+            <path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"/>
+          </svg>
+          <span class="nav-label">Marketplace</span>
+        </button>
+        <button class="nav-item" data-view="station" data-station="researchAndDevelopment">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+            <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-label">R&D</span>
+        </button>
+        <button class="nav-item" data-view="station" data-station="storageManagement">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" stroke="currentColor" stroke-width="2" rx="2"/>
+            <path d="M3 9H21M9 21V9" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span class="nav-label">Storage</span>
+        </button>
+        <button class="nav-item" data-view="station" data-station="teleporterArray">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="3" fill="currentColor"/>
+            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2" opacity="0.5"/>
+            <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+          </svg>
+          <span class="nav-label">Teleporter</span>
+        </button>
+        <button class="nav-item" data-view="station" data-station="personalTunnel">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M22 12C22 6.5 17.5 2 12 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M12 22C17.5 22 22 17.5 22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-label">Tunnel</span>
+        </button>
+        
+        <div class="nav-section-label">SYSTEM</div>
+        <button class="nav-item" data-view="settings">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span class="nav-label">Settings</span>
+        </button>
+      `;
+
+      // Re-attach listeners for progress sidebar
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const view = item.getAttribute('data-view');
+          const stationId = item.getAttribute('data-station');
+          if (view && window.switchView) {
+            window.switchView(view, stationId);
+          }
+        });
+      });
+    }
+
+    function renderInventoryManager() {
+      if (typeof oreValues === 'undefined' || typeof oreValues !== 'object') {
+        console.error('oreValues not loaded');
+        return;
+      }
+
+      loadInventoryManagerData();
+      syncFromProgressTracker(); // Sync latest data from progress tracker
+      
+      // Show global stats when viewing all categories
+      const globalStats = document.querySelector('.view-container#view-inventory-manager > .inventory-stats-grid');
+      if (globalStats) {
+        globalStats.style.display = 'grid';
+      }
+
+      const content = document.getElementById('inventory-manager-content');
+      content.innerHTML = invCategories.map(cat => {
+        return `
+          <div class="inv-category-container" id="inv-cat-${cat.id}">
+            <h3 class="inv-category-title ${cat.id}-banner">
+              <svg class="category-title-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                ${getCategoryIcon(cat.id)}
+              </svg>
+              ${cat.name}
+            </h3>
+            <table class="inv-table">
+              <thead>
+                <tr>
+                  <th>Ore Name</th>
+                  <th class="av-percent">AV%</th>
+                  <th>[ # ]</th>
+                  <th>AVs</th>
+                  <th>1 AV</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${cat.ores.map(oreName => {
+                  const oreData = oreValues[oreName];
+                  if (!oreData) return '';
+                  
+                  const qty = invManagerSaved[oreName] || 0;
+                  const avs = qty / oreData.AV;
+                  const percent = avs * 100;
+                  const percentClass = getPercentClass(percent);
+                  const isMarket = marketOres.includes(oreName);
+                  const oreClass = 'ore-' + oreName.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+                  return `
+                    <tr>
+                      <td class="ore-name ${oreClass}">
+                        <img class="ore-icon" src="${oreData.icon}" alt="${oreName}">
+                        <span>${oreName}</span>
+                        ${isMarket ? '<svg class="market-icon" onclick="showCustomAlert(\'This ore can be exchanged in the game market\', \'info\')" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"/><path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"/><path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"/></svg>' : ''}
+                      </td>
+                      <td class="av-percent ${percentClass}" data-ore="${oreName}">${percent.toFixed(1)}%</td>
+                      <td><input type="number" min="0" value="${qty}" class="inv-ore-input" data-ore="${oreName}"></td>
+                      <td class="inv-avs" data-ore="${oreName}">${avs.toFixed(2)}</td>
+                      <td>${oreData.AV}</td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+            <div class="inv-category-stats" id="inv-stats-${cat.id}"></div>
+          </div>
+        `;
+      }).join('');
+
+      // Attach input listeners
+      attachInventoryInputListeners();
+
+      updateInventoryManagerStats();
+      inventoryManagerInitialized = true;
+    }
+
+    function updateInventoryManagerStats() {
+      if (typeof oreValues === 'undefined') return;
+
+      let totalOres = 0;
+      let totalAV = 0;
+      let highest = null;
+      let lowest = null;
+
+      Object.keys(oreValues).forEach(oreName => {
+        const oreData = oreValues[oreName];
+        const qty = Number(invManagerSaved[oreName]) || 0;
+        totalOres += qty;
+        const avs = qty / oreData.AV;
+        totalAV += avs;
+
+        if (qty > 0) {
+          if (!highest || avs > highest.avs) highest = { ore: oreName, avs };
+          if (!lowest || avs < lowest.avs) lowest = { ore: oreName, avs };
+        }
+      });
+
+      document.getElementById("stat-total-ores").textContent = totalOres;
+      document.getElementById("stat-total-av").textContent = totalAV.toFixed(2);
+      document.getElementById("stat-highest-ore").textContent = highest ? `${highest.ore} (${highest.avs.toFixed(2)} AVs)` : "-";
+      document.getElementById("stat-lowest-ore").textContent = lowest ? `${lowest.ore} (${lowest.avs.toFixed(2)} AVs)` : "-";
+
+      // Update category stats
+      invCategories.forEach(cat => {
+        let totalQty = 0;
+        let totalAV = 0;
+        let highest = null;
+        let avSum = 0;
+        let oreCount = 0;
+
+        cat.ores.forEach(oreName => {
+          const oreData = oreValues[oreName];
+          if (!oreData) return;
+          const qty = Number(invManagerSaved[oreName]) || 0;
+          const avs = qty / oreData.AV;
+          totalQty += qty;
+          totalAV += avs;
+          if (qty > 0) {
+            if (!highest || avs > highest.avs) highest = { ore: oreName, avs };
+          }
+          avSum += avs;
+          oreCount++;
+        });
+
+        const avCompletion = oreCount ? (avSum / oreCount) * 100 : 0;
+        const statsDiv = document.getElementById(`inv-stats-${cat.id}`);
+        if (statsDiv) {
+          statsDiv.innerHTML = `
+            <span>➜ <strong>AV Completion:</strong> ${avCompletion.toFixed(1)}%</span>
+            <span>➜ <strong>Total AV:</strong> ${totalAV.toFixed(2)} AV</span>
+            <span>➜ <strong>Highest AV:</strong> ${highest ? `${highest.ore} (${highest.avs.toFixed(2)} AV)` : "-"}</span>
+          `;
+        }
+      });
+
+      // Update category detail view stats if present
+      const detailView = document.querySelector('.inv-detail-view');
+      if (detailView) {
+        updateCategoryDetailStats();
+      }
+    }
+
+    function updateCategoryDetailStats() {
+      // Get the category ID from the detail title
+      const detailTitle = document.querySelector('.inv-detail-title');
+      if (!detailTitle) return;
+      
+      const categoryName = detailTitle.textContent.trim();
+      const category = invCategories.find(cat => cat.name === categoryName);
+      if (!category) return;
+
+      // Calculate category-specific statistics
+      let totalOres = 0;
+      let totalAV = 0;
+      let oresCollected = 0;
+      let categoryHighest = null;
+      let categoryLowest = null;
+
+      category.ores.forEach(oreName => {
+        const oreData = oreValues[oreName];
+        if (oreData) {
+          const qty = Number(invManagerSaved[oreName]) || 0;
+          totalOres += qty;
+          const avs = qty / oreData.AV;
+          totalAV += avs;
+          if (qty > 0) {
+            oresCollected++;
+            if (!categoryHighest || avs > categoryHighest.avs) categoryHighest = { ore: oreName, avs };
+            if (!categoryLowest || avs < categoryLowest.avs) categoryLowest = { ore: oreName, avs };
+          }
+        }
+      });
+
+      // Calculate global statistics
+      let globalTotalOres = 0;
+      let globalTotalAV = 0;
+      let globalHighest = null;
+      let globalLowest = null;
+
+      Object.keys(oreValues).forEach(oreName => {
+        const oreData = oreValues[oreName];
+        const qty = Number(invManagerSaved[oreName]) || 0;
+        globalTotalOres += qty;
+        const avs = qty / oreData.AV;
+        globalTotalAV += avs;
+
+        if (qty > 0) {
+          if (!globalHighest || avs > globalHighest.avs) globalHighest = { ore: oreName, avs };
+          if (!globalLowest || avs < globalLowest.avs) globalLowest = { ore: oreName, avs };
+        }
+      });
+
+      // Update Category Statistics section
+      const categoryStatsCards = document.querySelectorAll('.inv-stats-section .inv-category-stats-horizontal')[0];
+      if (categoryStatsCards) {
+        const cards = categoryStatsCards.querySelectorAll('.metric-card');
+        if (cards.length >= 4) {
+          // Total Ores
+          cards[0].querySelector('.metric-value').textContent = totalOres.toLocaleString();
+          cards[0].querySelector('.metric-label').textContent = `${oresCollected} / ${category.ores.length} Collected`;
+          
+          // Total AV
+          cards[1].querySelector('.metric-value').textContent = totalAV.toFixed(2);
+          
+          // Highest Value
+          cards[2].querySelector('.metric-value').textContent = categoryHighest ? categoryHighest.ore : '-';
+          cards[2].querySelector('.metric-label').textContent = categoryHighest ? categoryHighest.avs.toFixed(2) + ' AVs' : 'No data';
+          
+          // Lowest Value
+          cards[3].querySelector('.metric-value').textContent = categoryLowest ? categoryLowest.ore : '-';
+          cards[3].querySelector('.metric-label').textContent = categoryLowest ? categoryLowest.avs.toFixed(2) + ' AVs' : 'No data';
+        }
+      }
+
+      // Update Overall Totals section
+      const globalStatsCards = document.querySelectorAll('.inv-stats-section .inv-category-stats-horizontal')[1];
+      if (globalStatsCards) {
+        const cards = globalStatsCards.querySelectorAll('.metric-card');
+        if (cards.length >= 4) {
+          // Total Ores
+          cards[0].querySelector('.metric-value').textContent = globalTotalOres.toLocaleString();
+          
+          // Total AV
+          cards[1].querySelector('.metric-value').textContent = globalTotalAV.toFixed(2);
+          
+          // Highest Value
+          cards[2].querySelector('.metric-value').textContent = globalHighest ? globalHighest.ore : '-';
+          cards[2].querySelector('.metric-label').textContent = globalHighest ? globalHighest.avs.toFixed(2) + ' AVs' : 'No data';
+          
+          // Lowest Value
+          cards[3].querySelector('.metric-value').textContent = globalLowest ? globalLowest.ore : '-';
+          cards[3].querySelector('.metric-label').textContent = globalLowest ? globalLowest.avs.toFixed(2) + ' AVs' : 'No data';
+        }
+      }
+    }
+
+    window.switchToInventoryManager = function() {
+      // Hide all views
+      document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active'));
+      
+      // Show inventory manager view
+      document.getElementById('view-inventory-manager').classList.add('active');
+      
+      // Update sidebar
+      document.getElementById('sidebar-title').textContent = 'Inventory Manager';
+      updateInventoryManagerSidebar(null, 'all');
+      
+      // Render if not initialized
+      if (!inventoryManagerInitialized) {
+        renderInventoryManager();
+      } else {
+        updateInventoryManagerStats();
+      }
+      
+      // Update top nav active state
+      document.querySelectorAll('.top-nav-link').forEach(l => l.classList.remove('active'));
+    };
+    
+    // Export inventory data
+    window.exportInventoryData = function() {
+      try {
+        const data = {
+          oreQuantities: invManagerSaved,
+          timestamp: new Date().toISOString(),
+          version: '1.0.0'
+        };
+        
+        const dataStr = JSON.stringify(data, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `inventory-data-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        
+        showCustomAlert('Inventory data exported successfully!', 'success');
+      } catch (e) {
+        console.error('Export failed:', e);
+        showCustomAlert('Failed to export inventory data: ' + e.message, 'error');
+      }
+    };
+    
+    // Export ALL data (progress + inventory)
+    window.exportAllData = function() {
+      try {
+        // Collect inventory data from progress tracker
+        const inventoryData = {};
+        if (window.ores && Array.isArray(window.ores)) {
+          window.ores.forEach(ore => {
+            inventoryData[ore.id] = ore.owned;
+          });
+        }
+        
+        const data = {
+          stationLevels: window.stationLevels || {},
+          inventory: inventoryData,
+          oreQuantities: invManagerSaved,
+          timestamp: new Date().toISOString(),
+          version: '1.0.0'
+        };
+        
+        const dataStr = JSON.stringify(data, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `azure-mines-complete-data-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        
+        showCustomAlert('All data exported successfully!', 'success');
+      } catch (e) {
+        console.error('Export failed:', e);
+        showCustomAlert('Failed to export all data: ' + e.message, 'error');
+      }
+    };
+    
+    // Import inventory data
+    window.importInventoryData = function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          
+          // Load inventory quantities
+          if (data.oreQuantities) {
+            invManagerSaved = data.oreQuantities;
+            localStorage.setItem('oreQuantities', JSON.stringify(invManagerSaved));
+            
+            // Re-render current view
+            const activeCategory = document.querySelector('.nav-item[data-inv-category].active');
+            if (activeCategory) {
+              const categoryId = activeCategory.getAttribute('data-inv-category');
+              renderCategoryDetail(categoryId);
+            } else {
+              renderInventoryManager();
+            }
+            
+            updateInventoryManagerStats();
+            showCustomAlert('Inventory data imported successfully!', 'success');
+          } else {
+            showCustomAlert('Invalid inventory data file format.', 'error');
+          }
+        } catch (err) {
+          console.error('Import failed:', err);
+          showCustomAlert('Failed to import inventory data: ' + err.message, 'error');
+        }
+      };
+      reader.readAsText(file);
+      
+      // Reset input
+      event.target.value = '';
+    };
+    
+    // Clear all inventory data
+    window.clearInventoryData = async function() {
+      const confirmed = await showCustomConfirm('Are you sure you want to clear ALL inventory data? This cannot be undone!');
+      if (confirmed) {
+        // Clear inventory manager data
+        Object.keys(invManagerSaved).forEach(key => {
+          invManagerSaved[key] = 0;
+        });
+        localStorage.setItem('oreQuantities', JSON.stringify(invManagerSaved));
+        
+        // Clear progress tracker ore quantities
+        if (window.ores && Array.isArray(window.ores)) {
+          window.ores.forEach(ore => {
+            ore.owned = 0;
+          });
+          if (typeof window.saveToLocalStorage === 'function') {
+            window.saveToLocalStorage();
+          }
+        }
+        
+        // Re-render current view
+        const activeCategory = document.querySelector('.nav-item[data-inv-category].active');
+        if (activeCategory) {
+          const categoryId = activeCategory.getAttribute('data-inv-category');
+          renderCategoryDetail(categoryId);
+        } else {
+          renderInventoryManager();
+        }
+        
+        updateInventoryManagerStats();
+        showCustomAlert('All inventory data has been cleared.', 'success');
+      }
+    };
+
+    // ==================== CUSTOM MODAL SYSTEM ====================
+    
+    function showCustomAlert(message, type = 'info') {
+      const modal = document.getElementById('custom-modal');
+      const modalTitle = document.getElementById('modal-title');
+      const modalMessage = document.getElementById('modal-message');
+      const modalIcon = document.getElementById('modal-icon');
+      const confirmBtn = document.getElementById('modal-confirm');
+      const cancelBtn = document.getElementById('modal-cancel');
+      
+      // Set icon based on type
+      if (type === 'success') {
+        modalIcon.innerHTML = '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>';
+        modalTitle.textContent = 'Success';
+      } else if (type === 'error') {
+        modalIcon.innerHTML = '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>';
+        modalTitle.textContent = 'Error';
+      } else if (type === 'info') {
+        modalIcon.innerHTML = '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>';
+        modalTitle.textContent = 'Information';
+      }
+      
+      modalMessage.textContent = message;
+      confirmBtn.textContent = 'OK';
+      cancelBtn.style.display = 'none';
+      
+      modal.style.display = 'flex';
+      setTimeout(() => modal.classList.add('show'), 10);
+      
+      return new Promise(resolve => {
+        confirmBtn.onclick = () => {
+          closeCustomModal();
+          resolve(true);
+        };
+      });
+    }
+    
+    function showCustomConfirm(message) {
+      const modal = document.getElementById('custom-modal');
+      const modalTitle = document.getElementById('modal-title');
+      const modalMessage = document.getElementById('modal-message');
+      const modalIcon = document.getElementById('modal-icon');
+      const confirmBtn = document.getElementById('modal-confirm');
+      const cancelBtn = document.getElementById('modal-cancel');
+      
+      modalIcon.innerHTML = '<circle cx="12" cy="12" r="10"/><path d="M9 9h6v6"/><path d="M9 15L15 9"/>';
+      modalTitle.textContent = 'Confirm Action';
+      modalMessage.textContent = message;
+      confirmBtn.textContent = 'Confirm';
+      cancelBtn.style.display = 'block';
+      
+      modal.style.display = 'flex';
+      setTimeout(() => modal.classList.add('show'), 10);
+      
+      return new Promise(resolve => {
+        confirmBtn.onclick = () => {
+          closeCustomModal();
+          resolve(true);
+        };
+        cancelBtn.onclick = () => {
+          closeCustomModal();
+          resolve(false);
+        };
+      });
+    }
+    
+    function closeCustomModal() {
+      const modal = document.getElementById('custom-modal');
+      modal.classList.remove('show');
+      setTimeout(() => {
+        modal.style.display = 'none';
+      }, 300);
+    }
+    
+    // Close modal on backdrop click
+    document.addEventListener('click', (e) => {
+      const modal = document.getElementById('custom-modal');
+      if (e.target === modal) {
+        closeCustomModal();
+      }
+    });
+    
+    window.showCustomAlert = showCustomAlert;
+    window.showCustomConfirm = showCustomConfirm;
+  </script>
+
+  <!-- Custom Modal -->
+  <div id="custom-modal" class="custom-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <svg id="modal-icon" class="modal-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        <h3 id="modal-title">Information</h3>
+      </div>
+      <div class="modal-body">
+        <p id="modal-message">Message</p>
+      </div>
+      <div class="modal-footer">
+        <button id="modal-cancel" class="modal-button modal-button-cancel">Cancel</button>
+        <button id="modal-confirm" class="modal-button modal-button-confirm">OK</button>
+      </div>
     </div>
-  </footer>
+  </div>
+
+  <div class="footer-container">
+    <footer class="footer">
+      <a href="https://github.com/LytexWZ" target="_blank" rel="noopener noreferrer" class="github-link">
+        <span>LytexWZ</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github">
+          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+        </svg>
+      </a>
+      <a href="https://discord.com" target="_blank" rel="noopener noreferrer" class="discord-link">
+        <span>lytexwz</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
+        </svg>
+      </a>
+    </footer>
+  </div>
 </body>
 </html>
